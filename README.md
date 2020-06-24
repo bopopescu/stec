@@ -1,4 +1,4 @@
 ![stec Logo](images/stec.png)
 
-# stec
+# stec (Student Technology Enthusiasts Community) 
 A web application for technology enthusiasts
