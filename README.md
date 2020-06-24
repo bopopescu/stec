@@ -1,4 +1,4 @@
-![stec Logo](images/favicon.ico)
+![stec Logo](images/stec.png)
 
 
 # stec
