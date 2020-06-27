@@ -1,2 +1,2 @@
 # stec
-A web application for technology enthusiasts
+A web application for student technology enthusiasts 
