@@ -129,6 +129,17 @@ header {
   padding: 15px 25px;
 }
 
+.message {
+  padding: 5px 12px;
+  background: #1d2936;
+  color: #F6F8FF;
+  border-left: 6px solid #1C9954;
+}
+
+.close {
+  float: right;
+}
+
   .about p{
     text-align: justify;
   }

@@ -59,13 +59,14 @@
     <main>
 
       {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <ul>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+
+          {% for message in messages %}
+          <div class="message">
+          <button type="button" name="button" class="close">close</button>
+          <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
+          </div>
+          {% endfor %}
+
       {% endwith %}
 
       {% block content %}{% endblock %}

@@ -11,7 +11,6 @@ $(document).ready(function() {
 
 
   // Function to change the nav-bar on scroll
-
   $(window).on("scroll", function() {
 
     if($(window).scrollTop()){
@@ -20,6 +19,13 @@ $(document).ready(function() {
     else {
       $('nav').removeClass('grey');
     }
+
+  });
+
+  // Function to remove flash message
+  $('.close').click(function() {
+
+    $('.message').hide();
 
   });
 
