@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A community of student enthusiastic about technology">
+    <meta name="keywords" content="technology enthusiast, student, community" />
+    <meta property="og:title" content="STEC" />
+    <meta property="og:type" content="website" />
+    <!-- <meta property="og:url" content=" " /> -->
+    <meta property="og:image" content="/static/images/stec.png" />
+    <meta property="og:description" content="A community of student enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="shortcut icon" href="/static/images/stec.ico">
+    <script src="https://kit.fontawesome.com/65a82e1708.js"></script>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@669&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet">
+    {% if title %}
+    <title>{{ title }} - STEC</title>
+    {% else %}
+    <title>STEC - Student Technology Enthusiast Community</title>
+    {% endif %}
+
+  </head>
+  <body>
+
+    <!-- Header section starts here -->
+    <header>
+
+      <!-- Navigation  -->
+      <nav>
+        <!-- Logo -->
+          <a href=" {{ url_for('index') }}">
+            <img class="logo" src="/static/images/stec.png" alt="STEC Logo">
+          </a>
+
+        <!-- Mobile Menu -->
+        <div class="icon active">
+          <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- Desktop Menu -->
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#community">Community</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#enquiry">Enquiry</a></li>
+          <li><a href="#login">Log in</a></li>
+        </ul>
+      </nav>
+
+      {% block navbar %}{% endblock %}
+    </header>
+
+    <!-- Main section starts here -->
+    <main>
+
+      {% block content %}{% endblock %}
+
+    </main>
+
+    <!-- Footer section starts here -->
+    <footer class="container green">
+      <p>Copyright &copy; 2020 STEC. <span>Developed & Designed By: A3AJAGBE</span></p>
+    </footer>
+
+    <!-- Script for jQuery and JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="/static/scripts/func.js" charset="utf-8"></script>
+
+  </body>
+</html>
