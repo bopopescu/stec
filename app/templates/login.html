@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Sign in</h2>
+
+<form class="stecform" action="" method="POST" novalidate>
+
+  <div class="container stecformfield">
+
+    {{ form.hidden_tag() }}
+
+    <i class="fas fa-user"></i>
+    {{ form.username.label }}
+    {{ form.username(size=15) }}
+    {% for error in form.username.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-lock"></i>
+    {{ form.password.label }}
+    {{ form.password(size=15) }}
+    {% for error in form.password.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    {{ form.remember_me() }} {{ form.remember_me.label }}
+
+    {{ form.submit() }}
+
+  </div>
+
+</form>
+
+{% endblock %}
