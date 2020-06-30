@@ -48,7 +48,11 @@
           <li><a href="#community">Community</a></li>
           <li><a href="#membership">Membership</a></li>
           <li><a href="#enquiry">Enquiry</a></li>
+           {% if current_user.is_anonymous %}
           <li><a href="{{ url_for('login') }}">Log in</a></li>
+          {% else %}
+          <li><a href="{{ url_for('logout') }}">Log out</a></li>
+          {% endif %}
         </ul>
       </nav>
 

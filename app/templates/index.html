@@ -12,7 +12,7 @@
 
     <h4>Ready to connect? Sign up for  &euro; 3/mon or &euro; 30/per membership fee</h4>
 
-    <button type="button" name="button"><a href="#">Become a member</a></button>
+    <button type="button" name="button"><a href="{{ url_for('register') }}">Become a member</a></button>
 
   </div>
 
@@ -25,6 +25,18 @@
 {% endblock %}
 
 {% block content %}
+
+<!-- Remember to remove  -->
+
+<section class="container community">
+
+  <h1>Hi, {{ current_user.Username }}!</h1>
+    {% for post in posts %}
+    <div><p>{{ post.author.Username }} says: <b>{{ post.Body }}</b></p></div>
+    {% endfor %}
+
+
+</section>
 
 <!-- About section starts here -->
 <section id="about" class="container about green">
