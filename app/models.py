@@ -1,9 +1,13 @@
 """Initializaing the application instance."""
 from datetime import datetime
-from app import db
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
+from app import db, login
 
 
-class Users(db.Model):
+class Users(UserMixin, db.Model):
+    """Users table query."""
+
     __tablename__ = 'Users'
 
     UserID = db.Column(db.Integer, primary_key=True)
@@ -14,12 +18,31 @@ class Users(db.Model):
     Password = db.Column(db.String(128))
     Posts = db.relationship('Posts', backref='author', lazy='dynamic')
 
+    def set_password(self, Password):
+        """To hash user's password."""
+        self.Password = generate_password_hash(Password)
+
+    def check_password(self, Password):
+        """To verify user's password hash."""
+        return check_password_hash(self.Password, Password)
+
     def __repr__(self):
         """For testing."""
         return '<Your username is: {}>'.format(self.Username)
 
+    def get_id(self):
+        """Return the user id for Flask-Login's requirements."""
+        return self.UserID
+
+    @login.user_loader
+    def load_user(UserID):
+        """Query to retrieve user ID."""
+        return Users.query.get(int(UserID))
+
 
 class Posts(db.Model):
+    """Posts table query."""
+
     __tablename__ = 'Posts'
 
     PostID = db.Column(db.Integer, primary_key=True)
