@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Register</h2>
+
+<form class="stecform" action="" method="POST" novalidate>
+
+  <div class="container stecformfield">
+
+    {{ form.hidden_tag() }}
+
+    <i class="fas fa-user"></i>
+    {{ form.name.label }}
+    {{ form.name(size=150) }}
+    {% for error in form.name.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-user-tag"></i>
+    {{ form.username.label }}
+    {{ form.username(size=15) }}
+    {% for error in form.username.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-envelope"></i>
+    {{ form.email.label }}<br>
+    {{ form.email(size=150) }}<br>
+    {% for error in form.email.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-graduation-cap"></i>
+    {{ form.school.label }}
+    {{ form.school(size=250) }}
+    {% for error in form.school.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-lock"></i>
+    {{ form.password.label }}
+    {{ form.password(size=15) }}
+    {% for error in form.password.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-lock"></i>
+    {{ form.password2.label }}<br>
+    {{ form.password2(size=15) }}<br>
+    {% for error in form.password2.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    {{ form.submit() }}
+
+  </div>
+
+</form>
+
+{% endblock %}
