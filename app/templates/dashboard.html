@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+<section class="container">
+
+  <h1>Hi, {{ current_user.Username }}!</h1>
+    {% for post in posts %}
+    <div><p>{{ post.author.Username }} says: <b>{{ post.Body }}</b></p></div>
+    {% endfor %}
+
+
+</section>
+
+
+{% endblock %}
