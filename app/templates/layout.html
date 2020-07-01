@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A community of student enthusiastic about technology">
+  <meta name="keywords" content="technology enthusiast, student, community" />
+  <meta property="og:title" content="STEC" />
+  <meta property="og:type" content="website" />
+  <!-- <meta property="og:url" content=" " /> -->
+  <meta property="og:image" content="/static/images/stec.png" />
+  <meta property="og:description" content="A community of student enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/users.css">
+  <link rel="shortcut icon" href="/static/images/stec.ico">
+  <script src="https://kit.fontawesome.com/65a82e1708.js"></script>
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@669&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet">
+  {% if title %}
+  <title>{{ title }} - STEC</title>
+  {% else %}
+  <title>STEC - Student Technology Enthusiast Community</title>
+  {% endif %}
+
+</head>
+
+<body>
+
+  <!-- header section -->
+  <header>
+    <a href=" {{ url_for('index') }}">
+      <img class="logo" src="/static/images/stec.png" alt="STEC Logo">
+    </a>
+
+    <!-- Mobile Menu -->
+    <div class="icon">
+      <i class="fas fa-bars"></i>
+    </div>
+
+  </header>
+
+  <!-- main section -->
+  <main class="container">
+
+    <!-- aside section -->
+    <aside class="asidenav">
+
+      <ul>
+        <li><a href="#about" class="active">Dashboard</a></li>
+        <li><a href="#community">Profile</a></li>
+        <li><a href="#membership">General posts</a></li>
+        <li><a href="#enquiry">Members post</a></li>
+         {% if current_user.is_anonymous %}
+        <li><a href="{{ url_for('login') }}">Log in</a></li>
+        {% else %}
+        <li><a href="{{ url_for('logout') }}">Log out</a></li>
+        {% endif %}
+      </ul>
+    </aside>
+
+    <!-- dashboard section -->
+    <section class="dashboard">
+
+      {% with messages = get_flashed_messages() %}
+
+          {% for message in messages %}
+          <div class="message">
+          <button type="button" name="button" class="close">close</button>
+          <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
+          </div>
+          {% endfor %}
+
+      {% endwith %}
+
+      <hr>
+
+      {% block content %}{% endblock %}
+
+
+      <!-- Footer section starts here -->
+      <footer>
+        <p>Copyright &copy; 2020 STEC. <span>Developed & Designed By: A3AJAGBE</span></p>
+      </footer>
+
+    </section>
+
+  </main>
+
+  <!-- Script for jQuery and JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="/static/scripts/dashboard.js" charset="utf-8"></script>
+
+
+</body>
+
+</html>
