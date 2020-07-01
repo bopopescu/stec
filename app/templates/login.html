@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'form.html' %}
 
 {% block content %}
 
@@ -6,7 +6,7 @@
 
 <form class="stecform" action="" method="POST" novalidate>
 
-  <div class="container stecformfield">
+  <div class="container-dash stecformfield">
 
     {{ form.hidden_tag() }}
 
@@ -27,6 +27,8 @@
     {{ form.remember_me() }} {{ form.remember_me.label }}
 
     {{ form.submit() }}
+
+    <h4>If you are not a registered member, <a href="{{ url_for('register') }}">Become a member</a></h4>
 
   </div>
 

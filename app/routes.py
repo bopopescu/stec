@@ -9,7 +9,6 @@ from werkzeug.urls import url_parse
 
 @app.route('/')
 @app.route('/index')
-@login_required
 def index():
     """Render the index/home page."""
     posts = [
@@ -30,7 +29,7 @@ def login():
     """Render the Sign in page."""
     # To redirect authenticated/logged in user
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
         # Query database to check user credentials
@@ -43,7 +42,7 @@ def login():
         # Redirect if user credentials is correct
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('index')
+            next_page = url_for('dashboard')
         return redirect(next_page)
     return render_template('login.html', title='Sign in', form=form)
 
@@ -53,7 +52,7 @@ def register():
     """Render the registration page."""
     # To redirect authenticated/logged in user
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('dashboard'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = Users(Name=form.name.data, Username=form.username.data, Email=form.email.data, School=form.school.data)
@@ -70,3 +69,20 @@ def logout():
     """To logout."""
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    """Render the user dashboard page."""
+    posts = [
+        {
+            'author': {'Username': 'John'},
+            'Body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'Username': 'Susan'},
+            'Body': 'The Avengers movie was so cool!'
+        }
+    ]
+    return render_template('dashboard.html', title='Dashboard', posts=posts)

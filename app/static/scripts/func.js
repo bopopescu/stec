@@ -1,11 +1,9 @@
-
-
 $(document).ready(function() {
 
-  /* Navigation drop down function */
-  $('.icon').click(function() {
+  /* Navigation drop down function in user and admin */
+  $('.icon').on('click', function() {
 
-     $('nav').toggleClass('active')
+     $('nav').slideToggle();
 
   });
 
@@ -19,13 +17,6 @@ $(document).ready(function() {
     else {
       $('nav').removeClass('grey');
     }
-
-  });
-
-  // Function to remove flash message
-  $('.close').click(function() {
-
-    $('.message').hide();
 
   });
 

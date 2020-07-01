@@ -1,155 +1,209 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
 
-{% block navbar %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A community of student enthusiastic about technology">
+  <meta name="keywords" content="technology enthusiast, student, community" />
+  <meta property="og:title" content="STEC" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="/static/images/stec.png" />
+  <meta property="og:description" content="A community of student enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
+  <link rel="stylesheet" href="/static/css/normalize.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="shortcut icon" href="/static/images/stec.ico">
+  <script src="https://kit.fontawesome.com/65a82e1708.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet">
+  {% if title %}
+  <title>{{ title }} - STEC</title>
+  {% else %}
+  <title>STEC - Student Technology Enthusiast Community</title>
+  {% endif %}
 
-<!-- Intro section -->
-<div class="wrap">
+</head>
 
-  <div class="col left">
-    <h1>Student Technology Enthusiast Community</h1>
+<body>
 
-    <h3>Together in our passion for technology</h3>
+  <!-- Header section starts here -->
+  <header>
 
-    <h4>Ready to connect? Sign up for  &euro; 3/mon or &euro; 30/per membership fee</h4>
+    <!-- Navigation  -->
+    <nav>
+      <!-- Logo -->
+      <a href=" {{ url_for('index') }}">
+        <img class="logo" src="/static/images/stec.png" alt="STEC Logo">
+      </a>
 
-    <button type="button" name="button"><a href="{{ url_for('register') }}">Become a member</a></button>
-
-  </div>
-
-  <div class="col right">
-      <img class="people" src="/static/images/people.png" alt="People together illustration">
-  </div>
-
-</div>
-
-{% endblock %}
-
-{% block content %}
-
-<!-- Remember to remove  -->
-
-<section class="container community">
-
-  <h1>Hi, {{ current_user.Username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.Username }} says: <b>{{ post.Body }}</b></p></div>
-    {% endfor %}
-
-
-</section>
-
-<!-- About section starts here -->
-<section id="about" class="container about green">
-
-  <h2>About Us</h2>
-
-  <hr>
-
-  <p>STEC Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-     et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-     ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-     fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-     mollit anim id est laborum.</p>
-
-</section>
-
-<!-- Intro section starts here -->
-<section id="community" class="container community">
-
-  <h2>Join the Community</h2>
-
-  <hr>
-
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempus purus metus, quis euismod magna eleifend non.</p>
-
-  <div class="wrap">
-    <div class="column">
-      <div class="card">
-        <i class="fas fa-network-wired"></i>
-        <h3>Network</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-        <h3>You're connected.</h3>
+      <!-- Mobile Menu -->
+      <div class="icon">
+        <i class="fas fa-bars"></i>
       </div>
-    </div>
 
-    <div class="column">
-      <div class="card">
-        <i class="fab fa-leanpub"></i>
-        <h3>Learn</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-        <h3>You're connected.</h3>
+      <!-- Desktop Menu -->
+        <ul>
+          <li><a href="#about">About</a></li>
+          <li><a href="#community">Community</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#enquiry">Enquiry</a></li>
+          <li><a href="{{ url_for('login') }}" class="log">Log in</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- Intro section -->
+    <div class="wrap">
+
+      <div class="col left">
+        <h1>Student Technology Enthusiast Community</h1>
+
+        <h3>Together in our passion for technology</h3>
+
+        <h4>Ready to connect? Sign up for &euro; 3/mon or &euro; 30/per membership fee</h4>
+
+        <button type="button" name="button"><a href="{{ url_for('register') }}">Become a member</a></button>
+
       </div>
-    </div>
 
-    <div class="column">
-      <div class="card">
-        <i class="fas fa-comments"></i>
-        <h3>Collaborate</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-        <h3>You're connected.</h3>
+      <div class="col right">
+        <img class="people" src="/static/images/people.png" alt="People together illustration">
       </div>
+
     </div>
 
-    <div class="column">
-      <div class="card">
-        <i class="fas fa-drafting-compass"></i>
-        <h3>Build</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-        <h3>You're connected.</h3>
+  </header>
+
+  <!-- Main section starts here -->
+  <main>
+
+    <!-- About section starts here -->
+    <section id="about" class="container about green">
+
+      <h2>About Us</h2>
+
+      <hr>
+
+      <p>STEC Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+        et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+        ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+        fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+        mollit anim id est laborum.</p>
+
+    </section>
+
+    <!-- Intro section starts here -->
+    <section id="community" class="container community">
+
+      <h2>Join the Community</h2>
+
+      <hr>
+
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque tempus purus metus, quis euismod magna eleifend non.</p>
+
+      <div class="wrap">
+        <div class="column">
+          <div class="card">
+            <i class="fas fa-network-wired"></i>
+            <h3>Network</h3>
+            <p>Some text</p>
+            <p>Some text</p>
+            <h4>You're connected.</h4>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="card">
+            <i class="fab fa-leanpub"></i>
+            <h3>Learn</h3>
+            <p>Some text</p>
+            <p>Some text</p>
+            <h4>You're connected.</h4>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="card">
+            <i class="fas fa-comments"></i>
+            <h3>Collaborate</h3>
+            <p>Some text</p>
+            <p>Some text</p>
+            <h4>You're connected.</h4>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="card">
+            <i class="fas fa-drafting-compass"></i>
+            <h3>Build</h3>
+            <p>Some text</p>
+            <p>Some text</p>
+            <h4>You're connected.</h4>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-</section>
+    </section>
 
-<!-- Membership section starts here -->
-<section id="membership" class="container membership">
+    <!-- Membership section starts here -->
+    <section id="membership" class="container membership">
 
-  <h2>Membership</h2>
+      <h2>Membership</h2>
 
-  <hr>
+      <hr>
 
-  <div class="wrap">
-    <div class="column">
-      <div class="card trial">
-        <h3>Try STEC for 7 days, no membership fee required</h3>
-        <button type="button" name="button">Sign up</button>
+      <div class="wrap">
+        <div class="column">
+          <div class="card trial">
+            <h3>Try STEC for 7 days, no membership fee required</h3>
+            <button type="button" name="button">Sign up</button>
+          </div>
+        </div>
+
+        <div class="content">
+          <h4>Mauris egestas lectus eu sapien bibendum vestibulum. Morbi vel nisi augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean blandit suscipit cursus. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+            eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h4>
+        </div>
       </div>
-    </div>
 
-    <div class="content">
-      <h4>Mauris egestas lectus eu sapien bibendum vestibulum. Morbi vel nisi augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean blandit suscipit cursus. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h4>
-    </div>
-  </div>
+    </section>
 
-</section>
+    <!-- Enquiry section starts here -->
+    <section id="enquiry" class="container enquiry">
 
-<!-- Enquiry section starts here -->
-<section id="enquiry" class="container enquiry">
+      <h2>Have an Enquiry</h2>
 
-  <h2>Have an Enquiry</h2>
+      <hr>
 
-  <hr>
+      <form class="" action="" method="post">
 
-  <form class="" action="" method="post">
+        <label for="name"><i class="fas fa-user"></i> Name: </label> <br>
+        <input type="text" name="name" value=""> <br>
 
-    <label for="name">Name: </label> <br>
-    <input type="text" name="name" value=""> <br>
+        <label for="email"><i class="fas fa-envelope"></i>  Email: </label> <br>
+        <input type="email" name="email" value=""> <br>
 
-    <label for="email">Email: </label> <br>
-    <input type="email" name="email" value=""> <br>
+        <label for="message"><i class="fas fa-comment-alt"></i> Enquiry: </label> <br>
+        <textarea name="name" rows="8" cols="50"></textarea> <br>
 
-    <label for="message">Enquiry: </label> <br>
-    <textarea name="name" rows="8" cols="50"></textarea> <br>
+        <input type="submit" value="Submit">
 
-    <input type="submit" value="Submit">
+      </form>
 
-  </form>
+    </section>
 
-</section>
+  </main>
 
-{% endblock %}
+  <!-- Footer section starts here -->
+  <footer class="container green">
+    <p>Copyright &copy; 2020 STEC. <span>Developed & Designed By: A3AJAGBE</span></p>
+  </footer>
+
+  <!-- Script for jQuery and JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="/static/scripts/func.js" charset="utf-8"></script>
+
+</body>
+
+</html>
