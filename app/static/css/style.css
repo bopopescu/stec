@@ -33,7 +33,7 @@ h2 {
 h3, h4 {
   font-family: 'Roboto Slab', serif;
   font-size: 1.4em;
-  margin-top: 0;
+  margin-top: 10px;
 }
 
 p {
@@ -67,8 +67,29 @@ header {
     transition: .5s;
   }
 
-  nav ul li {
+  nav ul {
+    margin: 60px auto;
+    padding: 0;
+    list-style-type: none;
     display: none;
+  }
+
+  nav ul li {
+    border-bottom: 1px solid #1d2936;
+  }
+
+  nav ul li a {
+    display: block;
+    padding: 16px 10px;
+    background: #50514F;
+    color: white;
+    font-size: 1.2em;
+  }
+
+  nav ul li a:hover, nav ul li a.active {
+    background: #1C9954;
+    color: #F6F8FF;
+    transition: .5s;
   }
 
   .grey {
@@ -84,10 +105,11 @@ header {
 
   .icon {
     background: #1C9954;
+    color: #F6F8FF;
     position: absolute;
     height: 35px;
     width: 35px;
-    top: 10%;
+    top: 15%;
     right: 25px;
     font-size: 1.5em;
     text-align: center;
@@ -96,8 +118,9 @@ header {
   }
 
   .log {
-    border: 5px solid #1C9954;
-    border-radius: 10px;
+    position: absolute;
+    top: 15%;
+    right: 70px;
   }
 
   /* Intro section */
@@ -321,26 +344,12 @@ footer span {
     margin: 0 40px;
   }
 
-  nav ul {
-    float: right;
-    padding-right: 40px;
+  .log {
+    position: absolute;
+    top: 15%;
+    right: 50px;
   }
 
-  nav ul li {
-    display: inline-block;
-    padding: 16px 10px;
-  }
-
-  nav ul li a {
-    color: #1d2936;
-    padding: 10px 10px;
-  }
-
-  nav ul li a:hover {
-    background: #1C9954;
-    color: #F6F8FF;
-    transition: .5s;
-  }
 
   /* Intro section */
 
