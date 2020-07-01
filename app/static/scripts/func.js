@@ -3,7 +3,7 @@ $(document).ready(function() {
   /* Navigation drop down function in user and admin */
   $('.icon').on('click', function() {
 
-     $('nav').slideToggle();
+     $('nav ul').toggle();
 
   });
 
