@@ -5,12 +5,13 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A community of student enthusiastic about technology">
-  <meta name="keywords" content="technology enthusiast, student, community" />
-  <meta property="og:title" content="STEC" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="/static/images/stec.png" />
-  <meta property="og:description" content="A community of student enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
+  <meta name="description" content="A community of individuals enthusiastic about technology">
+  <meta name="author" content="Aminat Ajagbe, A3AJAGBE">
+  <meta name="keywords" content="technology enthusiast, community, technology">
+  <meta property="og:title" content="STEC">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/static/images/stec.png">
+  <meta property="og:description" content="A community of individuals enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
   <link rel="stylesheet" href="/static/css/normalize.css">
   <link rel="stylesheet" href="/static/css/style.css">
   <link rel="shortcut icon" href="/static/images/stec.ico">
@@ -19,7 +20,7 @@
   {% if title %}
   <title>{{ title }} - STEC</title>
   {% else %}
-  <title>STEC - Student Technology Enthusiast Community</title>
+  <title>STEC - Simul Technology Enthusiast Community</title>
   {% endif %}
 
 </head>
@@ -36,6 +37,8 @@
         <img class="logo" src="/static/images/stec.png" alt="STEC Logo">
       </a>
 
+      <button type="button" name="button" class="log"><a href="{{ url_for('login') }}">Login</a></button>
+
       <!-- Mobile Menu -->
       <div class="icon">
         <i class="fas fa-bars"></i>
@@ -47,7 +50,6 @@
           <li><a href="#community">Community</a></li>
           <li><a href="#membership">Membership</a></li>
           <li><a href="#enquiry">Enquiry</a></li>
-          <li><a href="{{ url_for('login') }}" class="log">Log in</a></li>
         </ul>
 
     </nav>
@@ -56,7 +58,7 @@
     <div class="wrap">
 
       <div class="col left">
-        <h1>Student Technology Enthusiast Community</h1>
+        <h1>Simul Technology Enthusiast Community</h1>
 
         <h3>Together in our passion for technology</h3>
 
@@ -156,7 +158,7 @@
         <div class="column">
           <div class="card trial">
             <h3>Try STEC for 7 days, no membership fee required</h3>
-            <button type="button" name="button">Sign up</button>
+            <button type="button" name="button"><a href="{{ url_for('register') }}">Sign up</a></button>
           </div>
         </div>
 
