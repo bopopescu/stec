@@ -302,9 +302,17 @@ header {
   }
 
 /* footer section */
+footer{
+  padding: 10px 20px;
+  width: 100%;
+  text-align: left;
+}
+
 footer span {
+  float: left;
   color: #1d2936;
 }
+
 
 
 /* Big screen style */
@@ -389,5 +397,9 @@ footer span {
 
   .enquiry form {
     text-align: center;
+  }
+
+  footer span {
+    float: right;
   }
 }
