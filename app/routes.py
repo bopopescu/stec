@@ -11,17 +11,7 @@ from werkzeug.urls import url_parse
 @app.route('/index')
 def index():
     """Render the index/home page."""
-    posts = [
-        {
-            'author': {'Username': 'John'},
-            'Body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'Username': 'Susan'},
-            'Body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('index.html', title='Home', posts=posts)
+    return render_template('index.html', title='Home')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -68,7 +58,7 @@ def register():
 def logout():
     """To logout."""
     logout_user()
-    return redirect(url_for('index'))
+    return redirect(url_for('login'))
 
 
 @app.route('/dashboard')

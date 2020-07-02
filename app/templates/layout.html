@@ -5,23 +5,22 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A community of student enthusiastic about technology">
-  <meta name="keywords" content="technology enthusiast, student, community" />
-  <meta property="og:title" content="STEC" />
-  <meta property="og:type" content="website" />
-  <!-- <meta property="og:url" content=" " /> -->
-  <meta property="og:image" content="/static/images/stec.png" />
-  <meta property="og:description" content="A community of student enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
+  <meta name="description" content="A community of individuals enthusiastic about technology">
+  <meta name="author" content="Aminat Ajagbe, A3AJAGBE">
+  <meta name="keywords" content="technology enthusiast, community, technology">
+  <meta property="og:title" content="STEC">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/static/images/stec.png">
+  <meta property="og:description" content="A community of individuals enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
   <link rel="stylesheet" href="/static/css/normalize.css">
   <link rel="stylesheet" href="/static/css/users.css">
   <link rel="shortcut icon" href="/static/images/stec.ico">
   <script src="https://kit.fontawesome.com/65a82e1708.js"></script>
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@669&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet"> -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet">
   {% if title %}
   <title>{{ title }} - STEC</title>
   {% else %}
-  <title>STEC - Student Technology Enthusiast Community</title>
+  <title>STEC - Simul Technology Enthusiast Community</title>
   {% endif %}
 
 </head>
@@ -35,8 +34,16 @@
     </a>
 
     <!-- Mobile Menu -->
-    <div class="icon">
+    <div class="icon bars">
       <i class="fas fa-bars"></i>
+    </div>
+
+    <div class="icon compress">
+      <i class="fas fa-compress-alt"></i>
+    </div>
+
+    <div class="icon expand">
+      <i class="fas fa-expand-alt"></i>
     </div>
 
   </header>
@@ -45,17 +52,17 @@
   <main class="container">
 
     <!-- aside section -->
-    <aside class="asidenav">
+    <aside>
 
       <ul>
-        <li><a href="#about" class="active">Dashboard</a></li>
-        <li><a href="#community">Profile</a></li>
+        <li><a href="#about" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="#community"><i class="fas fa-user-alt"></i> Profile</a></li>
         <li><a href="#membership">General posts</a></li>
         <li><a href="#enquiry">Members post</a></li>
          {% if current_user.is_anonymous %}
         <li><a href="{{ url_for('login') }}">Log in</a></li>
         {% else %}
-        <li><a href="{{ url_for('logout') }}">Log out</a></li>
+        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
         {% endif %}
       </ul>
     </aside>
@@ -67,22 +74,20 @@
 
           {% for message in messages %}
           <div class="message">
-          <button type="button" name="button" class="close">close</button>
+            <div class="icon close">
+              <i class="fas fa-times"></i>
+            </div>
           <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
           </div>
           {% endfor %}
 
       {% endwith %}
 
+      <h1>Hi, {{ current_user.Username.upper() }}!</h1>
+
       <hr>
 
       {% block content %}{% endblock %}
-
-
-      <!-- Footer section starts here -->
-      <footer>
-        <p>Copyright &copy; 2020 STEC. <span>Developed & Designed By: A3AJAGBE</span></p>
-      </footer>
 
     </section>
 

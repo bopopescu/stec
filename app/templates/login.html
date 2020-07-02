@@ -2,11 +2,12 @@
 
 {% block content %}
 
-<h2>Sign in</h2>
-
 <form class="stecform" action="" method="POST" novalidate>
 
-  <div class="container-dash stecformfield">
+  <h2>Sign in</h2>
+  <hr>
+
+  <div class="stecformfield">
 
     {{ form.hidden_tag() }}
 
@@ -28,7 +29,7 @@
 
     {{ form.submit() }}
 
-    <h4>If you are not a registered member, <a href="{{ url_for('register') }}">Become a member</a></h4>
+    <h4>If you are not registered, <a href="{{ url_for('register') }}">Become a member</a></h4>
 
   </div>
 

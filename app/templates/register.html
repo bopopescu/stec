@@ -1,12 +1,13 @@
-{% extends 'base.html' %}
+{% extends 'form.html' %}
 
 {% block content %}
 
-<h2>Register</h2>
-
 <form class="stecform" action="" method="POST" novalidate>
 
-  <div class="container stecformfield">
+  <h2>Register</h2>
+  <hr>
+
+  <div class="stecformfield">
 
     {{ form.hidden_tag() }}
 
@@ -53,6 +54,8 @@
     {% endfor %}
 
     {{ form.submit() }}
+
+    <h4>If you are a registered member, <a href="{{ url_for('login') }}">Login</a></h4>
 
   </div>
 

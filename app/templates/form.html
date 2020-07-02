@@ -5,23 +5,22 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="A community of student enthusiastic about technology">
-  <meta name="keywords" content="technology enthusiast, student, community" />
-  <meta property="og:title" content="STEC" />
-  <meta property="og:type" content="website" />
-  <!-- <meta property="og:url" content=" " /> -->
-  <meta property="og:image" content="/static/images/stec.png" />
-  <meta property="og:description" content="A community of student enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
+  <meta name="description" content="A community of individuals enthusiastic about technology">
+  <meta name="author" content="Aminat Ajagbe, A3AJAGBE">
+  <meta name="keywords" content="technology enthusiast, community, technology">
+  <meta property="og:title" content="STEC">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/static/images/stec.png">
+  <meta property="og:description" content="A community of individuals enthusiastic about technology; this is a platform to learn, network, collaborate and build with like-minded people passionate about technology with diverse backgrounds. " />
   <link rel="stylesheet" href="/static/css/normalize.css">
-  <link rel="stylesheet" href="/static/css/users.css">
+  <link rel="stylesheet" href="/static/css/form.css">
   <link rel="shortcut icon" href="/static/images/stec.ico">
   <script src="https://kit.fontawesome.com/65a82e1708.js"></script>
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@669&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet"> -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,700&family=Roboto&family=Roboto+Slab:wght@600&display=swap" rel="stylesheet">
   {% if title %}
   <title>{{ title }} - STEC</title>
   {% else %}
-  <title>STEC - Student Technology Enthusiast Community</title>
+  <title>STEC - Simul Technology Enthusiast Community</title>
   {% endif %}
 
 </head>
@@ -39,6 +38,19 @@
   <!-- main section -->
   <main class="container">
 
+    {% with messages = get_flashed_messages() %}
+
+        {% for message in messages %}
+        <div class="message">
+          <div class="icon close">
+            <i class="fas fa-times"></i>
+          </div>
+        <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
+        </div>
+        {% endfor %}
+
+    {% endwith %}
+
     {% block content %}{% endblock %}
 
   </main>
@@ -47,6 +59,11 @@
   <footer>
     <p>Copyright &copy; 2020 STEC. <span>Developed & Designed By: A3AJAGBE</span></p>
   </footer>
+
+  <!-- Script for jQuery and JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="/static/scripts/dashboard.js" charset="utf-8"></script>
+
 
 </body>
 
