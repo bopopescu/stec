@@ -133,6 +133,12 @@ aside ul li a:hover:not(.active) {
   padding: 20px 15px 0;
 }
 
+.extend {
+  flex: 1;
+  height: 100%;
+  padding: 20px 15px 0;
+}
+
 .message {
   padding: 5px 12px;
   background: #1d2936;
@@ -181,9 +187,6 @@ aside ul li a:hover:not(.active) {
   }
 
   .extend {
-    flex: 1;
-    height: 100%;
-    padding: 20px 15px 0;
     margin-left: 0;
   }
 
