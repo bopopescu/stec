@@ -21,7 +21,14 @@ $(document).ready(function() {
 
      $('aside').hide();
     $('.dashboard').removeClass('dashboard').addClass('extend');
-    
+
   });
+
+  // Function to add active class to Navigation
+  $('.links').click(function () {
+    $('.links.active').removeClass('active');
+    $(this).addClass('active');
+  });
+
 
 });

@@ -21,7 +21,6 @@ h2, h3, h4 {
 
 h2 {
   margin-bottom: 10px;
-  font-size: 2.2em;
 }
 
 button {
@@ -150,8 +149,8 @@ aside ul li a:hover:not(.active) {
   background: #1C9954;
   height: 35px;
   width: 35px;
-  top: 35%;
-  right: 45px;
+  top: 25%;
+  right: 25px;
   font-size: 1.5em;
   text-align: center;
   line-height: 35px;
@@ -159,6 +158,51 @@ aside ul li a:hover:not(.active) {
   float: right;
 }
 
+/* form style */
+.stecform {
+  border: 3px solid #1d2936;
+  width: 100%;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.stecformfield {
+  padding-top: 20px;
+}
+
+.stecform input[type=text], input[type=password], textarea {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0 20px;
+  display: inline-block;
+  border: none;
+  outline-color: #1C9954;
+}
+
+textarea {
+  resize: none;
+  height: 100px;
+}
+
+.stecform input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  width: 100%;
+  opacity: 0.8;
+}
+
+.stecform input[type=submit]:hover {
+  opacity: 1;
+}
+
+.stecform span {
+  color: red;
+  display: block;
+  padding-bottom: 10px;
+}
 
 /* Big screen style */
 @media screen and (min-width: 700px) {
@@ -188,6 +232,10 @@ aside ul li a:hover:not(.active) {
 
   .extend {
     margin-left: 0;
+  }
+
+  .message .icon {
+    top: 14%;
   }
 
 }

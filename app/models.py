@@ -3,6 +3,7 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db, login
+from hashlib import md5
 
 
 class Users(UserMixin, db.Model):
@@ -11,10 +12,13 @@ class Users(UserMixin, db.Model):
     __tablename__ = 'Users'
 
     UserID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(150), index=True)
-    Username = db.Column(db.String(15), index=True, unique=True)
-    Email = db.Column(db.String(120), index=True, unique=True)
-    School = db.Column(db.String(250), index=True)
+    Name = db.Column(db.String(150), index=True, nullable=False)
+    Username = db.Column(db.String(15), index=True, unique=True, nullable=False)
+    Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
+    Bio = db.Column(db.String(150))
+    DateOfBirthday = db.Column(db.DateTime)
+    Gender = db.Column(db.String(30))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     Password = db.Column(db.String(128))
     Posts = db.relationship('Posts', backref='author', lazy='dynamic')
 
@@ -39,6 +43,12 @@ class Users(UserMixin, db.Model):
         """Query to retrieve user ID."""
         return Users.query.get(int(UserID))
 
+    def avatar(self, size):
+        """Using email to generate an avatar."""
+        digest = md5(self.Email.lower().encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
+            digest, size)
+
 
 class Posts(db.Model):
     """Posts table query."""
@@ -46,8 +56,8 @@ class Posts(db.Model):
     __tablename__ = 'Posts'
 
     PostID = db.Column(db.Integer, primary_key=True)
-    Subject = db.Column(db.String(50))
-    Body = db.Column(db.String(250))
+    Subject = db.Column(db.String(50), nullable=False)
+    Body = db.Column(db.String(250), nullable=False)
     Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     UserID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
 

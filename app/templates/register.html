@@ -13,42 +13,49 @@
 
     <i class="fas fa-user"></i>
     {{ form.name.label }}
-    {{ form.name(size=150) }}
+    {{ form.name }}
     {% for error in form.name.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
     <i class="fas fa-user-tag"></i>
     {{ form.username.label }}
-    {{ form.username(size=15) }}
+    {{ form.username }}
     {% for error in form.username.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
     <i class="fas fa-envelope"></i>
     {{ form.email.label }}<br>
-    {{ form.email(size=150) }}<br>
+    {{ form.email }}<br>
     {% for error in form.email.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
-    <i class="fas fa-graduation-cap"></i>
-    {{ form.school.label }}
-    {{ form.school(size=250) }}
-    {% for error in form.school.errors %}
+    <i class="fas fa-calendar-day"></i>
+    {{ form.dateofbirth.label }}
+    {{ form.dateofbirth }}
+    {% for error in form.dateofbirth.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-smile"></i>
+    {{ form.gender.label }}
+    {{ form.gender }}
+    {% for error in form.gender.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
     <i class="fas fa-lock"></i>
     {{ form.password.label }}
-    {{ form.password(size=15) }}
+    {{ form.password }}
     {% for error in form.password.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
     <i class="fas fa-lock"></i>
     {{ form.password2.label }}<br>
-    {{ form.password2(size=15) }}<br>
+    {{ form.password2 }}<br>
     {% for error in form.password2.errors %}
     <span>{{ error }}</span>
     {% endfor %}

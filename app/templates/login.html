@@ -13,14 +13,14 @@
 
     <i class="fas fa-user"></i>
     {{ form.username.label }}
-    {{ form.username(size=15) }}
+    {{ form.username }}
     {% for error in form.username.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
     <i class="fas fa-lock"></i>
     {{ form.password.label }}
-    {{ form.password(size=15) }}
+    {{ form.password }}
     {% for error in form.password.errors %}
     <span>{{ error }}</span>
     {% endfor %}
