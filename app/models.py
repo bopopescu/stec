@@ -20,7 +20,7 @@ class Users(UserMixin, db.Model):
     Gender = db.Column(db.String(30))
     last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     Password = db.Column(db.String(128))
-    Posts = db.relationship('Posts', backref='author', lazy='dynamic')
+    Posts = db.relationship('UserPosts', backref='author', lazy='dynamic')
 
     def set_password(self, Password):
         """To hash user's password."""
@@ -59,8 +59,22 @@ class Posts(db.Model):
     Subject = db.Column(db.String(50), nullable=False)
     Body = db.Column(db.String(250), nullable=False)
     Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    UserID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
 
     def __repr__(self):
         """For testing."""
         return '<Post subject: {} and body: {}>'.format(self.Subject, self.Body)
+
+
+class UserPosts(db.Model):
+    """User Posts table query."""
+
+    __tablename__ = 'UserPosts'
+
+    UserPostID = db.Column(db.Integer, primary_key=True)
+    Body = db.Column(db.String(250), nullable=False)
+    Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    UserID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
+
+    def __repr__(self):
+        """For testing."""
+        return '<User Post body: {}>'.format(self.Body)

@@ -2,7 +2,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, DateField, RadioField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
-from app.models import Users
+from app.models import Users, UserPosts
 
 
 class LoginForm(FlaskForm):
@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=5, max=150)])
     username = StringField('Username', validators=[DataRequired(), Length(min=5, max=15)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    dateofbirth = DateField('Date Of Birth', validators=[DataRequired()])
+    dateofbirth = DateField('Date Of Birth', format='%m/%d/%Y', validators=[DataRequired()])
     gender = RadioField('Gender', choices=[
         ('F', 'Female'), ('M', 'Male'), ('O', 'Prefer not to choose')], validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=7, max=15)])
@@ -40,6 +40,28 @@ class RegistrationForm(FlaskForm):
 
 
 class EditProfileForm(FlaskForm):
+    """Edit Profile Form."""
+
+
     username = StringField('Username', validators=[DataRequired()])
     bio = TextAreaField('Bio', validators=[Length(min=0, max=150)])
     submit = SubmitField('Update')
+
+    def __init__(self, original_username, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.original_username = original_username
+
+    def validate_username(self, Username):
+        if Username.data != self.original_username:
+            user = Users.query.filter_by(Username=self.username.data).first()
+            if user is not None:
+                raise ValidationError('Username not available.')
+
+
+class UserPostForm(FlaskForm):
+    """User Post Form."""
+
+
+    body = TextAreaField('Post', validators=[
+        DataRequired(), Length(min=1, max=150)])
+    submit = SubmitField('Submit')

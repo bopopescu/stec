@@ -1,9 +1,9 @@
 """Initializaing the application instance."""
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, UserPostForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import Users
+from app.models import Users, UserPosts
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -65,7 +65,7 @@ def logout():
     return redirect(url_for('login'))
 
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
 def dashboard():
     """Render the user dashboard page."""
@@ -82,24 +82,27 @@ def dashboard():
     return render_template('dashboard.html', title='Dashboard', posts=posts)
 
 
-@app.route('/profile/<Username>')
+@app.route('/profile/<Username>', methods=['GET', 'POST'])
 @login_required
 def profile(Username):
     """Render the user profile page."""
     user = Users.query.filter_by(Username=Username).first_or_404()
-    posts = [
-        {'author': user, 'Body': 'Test post #1'},
-        {'author': user, 'Body': 'Test post #2'}
-    ]
-    return render_template('profile.html', title='Profile', posts=posts,
-                           user=user)
+    page = request.args.get('page', 1, type=int)
+    posts = UserPosts.query.order_by(UserPosts.Timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('members_post', Username=user.Username, page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('members_post', Username=user.Username, page=posts.prev_num) \
+        if posts.has_prev else None
+    return render_template('profile.html', title='Profile', user=user, posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     """Render the page for profile editing."""
-    form = EditProfileForm()
+    form = EditProfileForm(current_user.Username)
     if form.validate_on_submit():
         current_user.Username = form.username.data
         current_user.Bio = form.bio.data
@@ -119,3 +122,27 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+
+
+
+@app.route('/members_post', methods=['GET', 'POST'])
+@login_required
+def members_post():
+    """Render the member post page."""
+    form = UserPostForm()
+    page = request.args.get('page', 1, type=int)
+    if form.validate_on_submit():
+        post = UserPosts(Body=form.body.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Post upload successful')
+        return redirect(url_for('members_post'))
+    posts = UserPosts.query.order_by(UserPosts.Timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('members_post', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('members_post', page=posts.prev_num) \
+        if posts.has_prev else None
+
+    return render_template('members_post.html', title='Members Post', form=form, posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)

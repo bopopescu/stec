@@ -2,15 +2,9 @@
 
 {% block content %}
 
-<section>
-
     {% for post in posts %}
-    <div><p>{{ post.author.Username }} says: <b>{{ post.Body }}</b></p></div>
+    <p>{{ post.author.Username }} says: <b>{{ post.Body }}</b></p>
     {% endfor %}
-
-
-
-</section>
 
 
 {% endblock %}
