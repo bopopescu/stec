@@ -1,5 +1,6 @@
 """Initializaing the application instance."""
 from flask import Flask
+from app import routes, models, errors
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -29,5 +30,3 @@ if not app.debug:
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('STEC SERVER STARTS')
-
-from app import routes, models, errors

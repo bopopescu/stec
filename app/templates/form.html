@@ -40,14 +40,14 @@
 
     {% with messages = get_flashed_messages() %}
 
-        {% for message in messages %}
-        <div class="message">
-          <div class="icon close">
-            <i class="fas fa-times"></i>
-          </div>
-        <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
-        </div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="message">
+      <div class="icon close">
+        <i class="fas fa-times"></i>
+      </div>
+      <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
+    </div>
+    {% endfor %}
 
     {% endwith %}
 

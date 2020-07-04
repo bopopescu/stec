@@ -1,5 +1,4 @@
 /* General Style */
-
 * {
   box-sizing: border-box;
 }
@@ -29,7 +28,6 @@ h2 {
 
 h4 {
   font-family: 'Roboto Slab', serif;
-
 }
 
 button {
@@ -40,7 +38,7 @@ button {
   cursor: pointer;
 }
 
-button a{
+button a {
   color: #F6F8FF;
 }
 
@@ -90,7 +88,6 @@ header {
   float: right;
 }
 
-
 /* form style */
 .stecform {
   border: 3px solid #1d2936;
@@ -132,9 +129,8 @@ header {
   padding-bottom: 10px;
 }
 
-
 /* footer section */
-footer{
+footer {
   padding: 10px 20px;
   width: 100%;
   background-color: #4CAF50;
@@ -148,7 +144,6 @@ footer span {
 }
 
 @media screen and (min-width: 700px) {
-
   footer span {
     float: right;
   }
@@ -161,5 +156,4 @@ footer span {
     width: 70%;
     margin: auto;
   }
-
 }

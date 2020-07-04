@@ -1,7 +1,8 @@
 """Initializaing the application instance."""
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, UserPostForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
+            UserPostForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Users, UserPosts
 from werkzeug.urls import url_parse
@@ -90,11 +91,12 @@ def profile(Username):
     page = request.args.get('page', 1, type=int)
     posts = UserPosts.query.order_by(UserPosts.Timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
-    next_url = url_for('members_post', Username=user.Username, page=posts.next_num) \
+    next_url = url_for('profile', Username=user.Username, page=posts.next_num)\
         if posts.has_next else None
-    prev_url = url_for('members_post', Username=user.Username, page=posts.prev_num) \
+    prev_url = url_for('profile', Username=user.Username, page=posts.prev_num)\
         if posts.has_prev else None
-    return render_template('profile.html', title='Profile', user=user, posts=posts.items, next_url=next_url,
+    return render_template('profile.html', title='Profile', user=user,
+                           posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
 
@@ -124,7 +126,6 @@ def before_request():
         db.session.commit()
 
 
-
 @app.route('/members_post', methods=['GET', 'POST'])
 @login_required
 def members_post():
@@ -144,5 +145,6 @@ def members_post():
     prev_url = url_for('members_post', page=posts.prev_num) \
         if posts.has_prev else None
 
-    return render_template('members_post.html', title='Members Post', form=form, posts=posts.items, next_url=next_url,
+    return render_template('members_post.html', title='Members Post',
+                           form=form, posts=posts.items, next_url=next_url,
                            prev_url=prev_url)

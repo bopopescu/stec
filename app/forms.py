@@ -1,8 +1,10 @@
 """Initializaing the application instance."""
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, DateField, RadioField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
-from app.models import Users, UserPosts
+from wtforms import StringField, PasswordField, BooleanField, \
+        DateField, RadioField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, ValidationError, \
+        Email, EqualTo, Length
+from app.models import Users
 
 
 class LoginForm(FlaskForm):
@@ -17,15 +19,21 @@ class LoginForm(FlaskForm):
 class RegistrationForm(FlaskForm):
     """Registration Form."""
 
-    name = StringField('Name', validators=[DataRequired(), Length(min=5, max=150)])
-    username = StringField('Username', validators=[DataRequired(), Length(min=5, max=15)])
+    name = StringField('Name', validators=[
+                       DataRequired(), Length(min=5, max=150)])
+    username = StringField('Username', validators=[
+                           DataRequired(), Length(min=5, max=15)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    dateofbirth = DateField('Date Of Birth', format='%m/%d/%Y', validators=[DataRequired()])
+    dateofbirth = DateField(
+        'Date Of Birth', format='%m/%d/%Y', validators=[DataRequired()])
     gender = RadioField('Gender', choices=[
-        ('F', 'Female'), ('M', 'Male'), ('O', 'Prefer not to choose')], validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=7, max=15)])
+        ('F', 'Female'), ('M', 'Male'), ('O', 'Prefer not to choose')],
+                validators=[DataRequired()])
+    password = PasswordField('Password', validators=[
+                              DataRequired(), Length(min=7, max=15)])
     password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), Length(min=7, max=15), EqualTo('password')])
+        'Repeat Password', validators=[DataRequired(), Length(min=7, max=15),
+                                       EqualTo('password')])
     submit = SubmitField('Register')
 
     def validate_username(self, Username):
@@ -41,7 +49,6 @@ class RegistrationForm(FlaskForm):
 
 class EditProfileForm(FlaskForm):
     """Edit Profile Form."""
-
 
     username = StringField('Username', validators=[DataRequired()])
     bio = TextAreaField('Bio', validators=[Length(min=0, max=150)])
@@ -60,7 +67,6 @@ class EditProfileForm(FlaskForm):
 
 class UserPostForm(FlaskForm):
     """User Post Form."""
-
 
     body = TextAreaField('Post', validators=[
         DataRequired(), Length(min=1, max=150)])

@@ -13,7 +13,8 @@ class Users(UserMixin, db.Model):
 
     UserID = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(150), index=True, nullable=False)
-    Username = db.Column(db.String(15), index=True, unique=True, nullable=False)
+    Username = db.Column(db.String(15), index=True,
+                         unique=True, nullable=False)
     Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     Bio = db.Column(db.String(150))
     DateOfBirthday = db.Column(db.DateTime)
@@ -62,7 +63,8 @@ class Posts(db.Model):
 
     def __repr__(self):
         """For testing."""
-        return '<Post subject: {} and body: {}>'.format(self.Subject, self.Body)
+        return '<Post subject: {} and body: {}>'.format(self.Subject
+                                                        , self.Body)
 
 
 class UserPosts(db.Model):

@@ -1,5 +1,4 @@
 /* General Style */
-
 * {
   box-sizing: border-box;
 }
@@ -31,7 +30,7 @@ button {
   cursor: pointer;
 }
 
-button a{
+button a {
   color: #F6F8FF;
 }
 
@@ -88,7 +87,6 @@ header {
   right: 25px;
 }
 
-
 /* aside section */
 aside {
   background: #1C9954;
@@ -106,10 +104,11 @@ aside ul {
   list-style-type: none;
 }
 
-aside ul li{
+aside ul li {
   text-transform: uppercase;
   border-bottom: 1px solid #1d2936;
 }
+
 aside ul li a {
   display: block;
   padding: 16px;
@@ -207,7 +206,6 @@ textarea {
 
 /* Big screen style */
 @media screen and (min-width: 700px) {
-
   .bars {
     display: none;
   }
@@ -238,5 +236,4 @@ textarea {
   .message .icon {
     top: 14%;
   }
-
 }

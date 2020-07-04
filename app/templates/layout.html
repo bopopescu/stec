@@ -58,7 +58,7 @@
         <li><a class="links active" href="{{ url_for('dashboard') }}"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
         <li><a class="links" href="{{ url_for('profile', Username=current_user.Username) }}"><i class="fas fa-user-alt"></i> Profile</a></li>
         <li><a class="links" href="{{ url_for('members_post') }}"> Members post</a></li>
-         {% if current_user.is_anonymous %}
+        {% if current_user.is_anonymous %}
         <li><a class="links" href="{{ url_for('login') }}">Log in</a></li>
         {% else %}
         <li><a class="links" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
@@ -71,14 +71,14 @@
 
       {% with messages = get_flashed_messages() %}
 
-          {% for message in messages %}
-          <div class="message">
-            <div class="icon close">
-              <i class="fas fa-times"></i>
-            </div>
-          <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
-          </div>
-          {% endfor %}
+      {% for message in messages %}
+      <div class="message">
+        <div class="icon close">
+          <i class="fas fa-times"></i>
+        </div>
+        <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
+      </div>
+      {% endfor %}
 
       {% endwith %}
 
