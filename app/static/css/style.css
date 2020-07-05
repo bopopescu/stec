@@ -269,21 +269,27 @@ button a {
 
 .enquiry .fas {
   margin-right: 10px;
+  font-size: 1.4em;
+}
+
+.enquiry label, span {
+  font-size: 1.3em;
 }
 
 input[type=text], input[type=email], textarea {
   width: 100%;
   padding: 12px;
   border: 1px solid #F6F8FF;
-  border-radius: 4px;
+  border-radius: 6px;
   margin-top: 6px;
   margin-bottom: 16px;
-  /* resize: vertical; */
+  resize: vertical;
+  outline-color: #1C9954;
 }
 
 textarea {
   resize: none;
-  height: 100px;
+  height: 150px;
 }
 
 input[type=submit] {
@@ -291,7 +297,7 @@ input[type=submit] {
   color: #F6F8FF;
   padding: 12px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   width: 100%;
 }
 
@@ -314,24 +320,12 @@ input[type=submit]:hover {
   border-left: 6px solid #1d2936;
 }
 
-.message .icon {
-  background: #1d2936;
-  height: 35px;
-  width: 35px;
-  top: 35%;
-  right: 45px;
-  font-size: 1.5em;
-  text-align: center;
-  line-height: 35px;
-  cursor: pointer;
-  float: right;
-}
-
 /* footer section */
 footer {
   padding: 10px 20px;
   width: 100%;
   text-align: left;
+  height: 120px;
 }
 
 footer span {
@@ -404,6 +398,12 @@ footer span {
     padding: 0 10px;
   }
 
+  .membership .column {
+    float: left;
+    width: 40%;
+    padding: 0 10px;
+  }
+
   .trial {
     margin-right: 20px;
   }
@@ -418,6 +418,10 @@ footer span {
 
   .enquiry form {
     text-align: center;
+  }
+
+  footer {
+    height: 70px;
   }
 
   footer span {

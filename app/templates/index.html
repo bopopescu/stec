@@ -193,24 +193,24 @@
         {{ form.hidden_tag() }}
 
         <i class="fas fa-user"></i>
-        {{ form.name.label }}
-        {{ form.name }}
+        {{ form.name.label }}<br>
+        {{ form.name }} <br>
         {% for error in form.name.errors %}
-        <span>{{ error }}</span>
+        <span>{{ error }}</span><br>
         {% endfor %}
 
         <i class="fas fa-envelope"></i>
-        {{ form.email.label }}
-        {{ form.email }}
+        {{ form.email.label }}<br>
+        {{ form.email }} <br>
         {% for error in form.email.errors %}
-        <span>{{ error }}</span>
+        <span>{{ error }}</span><br>
         {% endfor %}
 
         <i class="fas fa-comment-alt"></i>
-        {{ form.enquiry.label }}
-        {{ form.enquiry }}
+        {{ form.enquiry.label }}<br>
+        {{ form.enquiry }} <br>
         {% for error in form.enquiry.errors %}
-        <span>{{ error }}</span>
+        <span>{{ error }}</span><br>
         {% endfor %}
 
         {{ form.submit() }}
