@@ -1,0 +1,19 @@
+{% extends 'admin_layout.html' %}
+
+{% block content %}
+
+    {% for enquiry in enquiries %}
+
+    <table>
+        <tr>
+            <td>{{ enquiry.Name }}</td>
+            <td>{{ enquiry.Email }}</td>
+            <td>{{ enquiry.Enquiry }}</td>
+            <td>{{ enquiry.Timestamp }}</td>
+
+        </tr>
+    </table>
+
+    {% endfor %}
+
+{% endblock %}

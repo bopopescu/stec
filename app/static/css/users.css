@@ -45,6 +45,7 @@ hr {
   margin-bottom: 20px;
 }
 
+
 /* header section */
 header {
   position: fixed;
@@ -178,9 +179,9 @@ aside ul li a:hover:not(.active) {
   outline-color: #1C9954;
 }
 
-textarea {
+.admin textarea {
   resize: none;
-  height: 100px;
+  height: 200px;
 }
 
 .stecform input[type=submit] {

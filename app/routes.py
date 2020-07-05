@@ -2,9 +2,10 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
-            UserPostForm, ContactForm
+            UserPostForm, ContactForm, AdminLoginForm, AdminRegistrationForm, \
+            AdminPostForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import Users, UserPosts, Contacts
+from app.models import Users, UserPosts, Contacts, Admins, Posts
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -155,4 +156,105 @@ def members_post():
 
     return render_template('members_post.html', title='Members Post',
                            form=form, posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)
+
+
+# Adminstrator routes starts here
+@app.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    """Render the Sign in page."""
+    # To redirect authenticated/logged in admins
+    if current_user.is_authenticated:
+        return redirect(url_for('admin_dashboard'))
+    form = AdminLoginForm()
+    if form.validate_on_submit():
+        # Query database to check admin credentials
+        admin = Admins.query.filter_by(Username=form.username.data).first()
+        if admin is None or not admin.check_password(form.password.data):
+            # Redirect if admin credentials is incorrect
+            flash('Invalid username or password')
+            return redirect(url_for('admin_login'))
+        login_user(admin, remember=form.remember_me.data)
+        # Redirect if admin credentials is correct
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('admin_dashboard')
+        return redirect(next_page)
+    return render_template('admin_login.html', title='Admin Sign in',
+                           form=form)
+
+
+@app.route('/admin_register', methods=['GET', 'POST'])
+def admin_register():
+    """Render the registration page."""
+    # To redirect authenticated/logged in admins
+    if current_user.is_authenticated:
+        return redirect(url_for('admin_dashboard'))
+    form = AdminRegistrationForm()
+    if form.validate_on_submit():
+        admin = Admins(Name=form.name.data, Username=form.username.data,
+                       Email=form.email.data)
+        admin.set_password(form.password.data)
+        db.session.add(admin)
+        db.session.commit()
+        flash('Congratulations, you are an adminstrator of STEC!!!')
+        return redirect(url_for('admin_login'))
+    return render_template('admin_register.html', title='Admin Register',
+                           form=form)
+
+
+@app.route('/admin_logout')
+def admin_logout():
+    """To logout."""
+    logout_user()
+    return redirect(url_for('admin_login'))
+
+
+@app.route('/admin_dashboard', methods=['GET', 'POST'])
+@login_required
+def admin_dashboard():
+    """Render the user dashboard page."""
+    page = request.args.get('page', 1, type=int)
+    posts = Posts.query.order_by(Posts.Timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('admin_post', page=posts.next_num) \
+        if posts.has_next else None
+    prev_url = url_for('admin_post', page=posts.prev_num) \
+        if posts.has_prev else None
+
+    return render_template('admin_dashboard.html', title='Admin Dashboard',
+                           posts=posts.items, next_url=next_url,
+                           prev_url=prev_url)
+
+
+@app.route('/admin_post', methods=['GET', 'POST'])
+@login_required
+def admin_post():
+    """Render the member post page."""
+    form = AdminPostForm()
+    if form.validate_on_submit():
+        post = Posts(Subject=form.subject.data, Body=form.body.data,
+                     author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Post upload successfully')
+        return redirect(url_for('admin_post'))
+    return render_template('admin_post.html', title='Adminstrator Post',
+                           form=form)
+
+
+@app.route('/admin_enquiry', methods=['GET', 'POST'])
+@login_required
+def admin_enquiry():
+    """Render the member post page."""
+    page = request.args.get('page', 1, type=int)
+    enquiries = Contacts.query.order_by(Contacts.Timestamp.desc()).paginate(
+        page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('admin_enquiry', page=enquiries.next_num) \
+        if enquiries.has_next else None
+    prev_url = url_for('admin_enquiry', page=enquiries.prev_num) \
+        if enquiries.has_prev else None
+
+    return render_template('admin_enquiry.html', title='User Enquiry',
+                           enquiries=enquiries.items, next_url=next_url,
                            prev_url=prev_url)
