@@ -1,8 +1,8 @@
 <table>
     <tr>
-        <td><img src="{{ post.author.avatar(36) }}"></td>
+        <td><img src="{{ post.author.avatar(36) }}" alt="user avatar"></td>
         <td><b>{{ post.Body }}</b>
-          by: <a href="{{ url_for('profile',  Username=post.author.Username) }}"> {{ post.author.Username }} </a>  
+          by: <a href="{{ url_for('profile',  Username=post.author.Username) }}"> {{ post.author.Username }} </a>
           on {{ post.Timestamp }}</td>
     </tr>
 </table>

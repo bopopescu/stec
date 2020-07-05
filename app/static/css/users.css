@@ -92,7 +92,6 @@ aside {
   background: #1C9954;
   width: 100%;
   height: auto;
-  position: relative;
   display: none;
   transition: .5s;
   left: 0;
