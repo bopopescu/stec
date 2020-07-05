@@ -2,18 +2,26 @@
 from flask import render_template, flash, redirect, url_for, request
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
-            UserPostForm
+            UserPostForm, ContactForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import Users, UserPosts
+from app.models import Users, UserPosts, Contacts
 from werkzeug.urls import url_parse
 from datetime import datetime
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
     """Render the index/home page."""
-    return render_template('index.html', title='Home')
+    form = ContactForm()
+    if form.validate_on_submit():
+        info = Contacts(Name=form.name.data, Email=form.email.data,
+                        Enquiry=form.enquiry.data)
+        db.session.add(info)
+        db.session.commit()
+        flash('Enquiry sent successfully!!!')
+        return redirect(url_for('index'))
+    return render_template('index.html', title='Home', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])

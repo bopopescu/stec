@@ -4,8 +4,18 @@ from wtforms import StringField, PasswordField, BooleanField, \
         DateField, RadioField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, \
         Email, EqualTo, Length
-from app.models import Users
+from app.models import Users, UserPosts, Contacts
 
+
+class ContactForm(FlaskForm):
+    """Contact Form in index page."""
+
+    name = StringField('Name', validators=[
+                DataRequired(), Length(min=5, max=150)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    enquiry = TextAreaField('Enquiry', validators=[
+        DataRequired(), Length(min=5)])
+    submit = SubmitField('Submit')
 
 class LoginForm(FlaskForm):
     """Login Form."""

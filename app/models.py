@@ -80,3 +80,19 @@ class UserPosts(db.Model):
     def __repr__(self):
         """For testing."""
         return '<User Post body: {}>'.format(self.Body)
+
+
+class Contacts(db.Model):
+    """Contact table query."""
+
+    __tablename__ = 'Contacts'
+
+    ContactID = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(150), index=True, nullable=False)
+    Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
+    Enquiry = db.Column(db.Text(), nullable=False)
+    Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        """For testing."""
+        return '<{}: your enquiry is submitted>'.format(self.Name)
