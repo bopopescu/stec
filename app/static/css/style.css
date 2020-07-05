@@ -278,7 +278,12 @@ input[type=text], input[type=email], textarea {
   border-radius: 4px;
   margin-top: 6px;
   margin-bottom: 16px;
-  resize: vertical;
+  /* resize: vertical; */
+}
+
+textarea {
+  resize: none;
+  height: 100px;
 }
 
 input[type=submit] {
@@ -293,6 +298,33 @@ input[type=submit] {
 input[type=submit]:hover {
   background: #F6F8FF;
   color: #1C9954;
+}
+
+.enquiry span {
+  color: red;
+  display: block;
+  padding-bottom: 10px;
+}
+
+.message {
+  padding: 5px 12px;
+  margin-bottom: 30px;
+  background: #1C9954;
+  color: #F6F8FF;
+  border-left: 6px solid #1d2936;
+}
+
+.message .icon {
+  background: #1d2936;
+  height: 35px;
+  width: 35px;
+  top: 35%;
+  right: 45px;
+  font-size: 1.5em;
+  text-align: center;
+  line-height: 35px;
+  cursor: pointer;
+  float: right;
 }
 
 /* footer section */

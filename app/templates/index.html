@@ -174,22 +174,46 @@
     <!-- Enquiry section starts here -->
     <section id="enquiry" class="container enquiry">
 
+      {% with messages = get_flashed_messages() %}
+
+      {% for message in messages %}
+      <div class="message">
+        <h3><strong>[STEC Alert]=></strong> {{ message }} </h3>
+      </div>
+      {% endfor %}
+
+      {% endwith %}
+
       <h2>Have an Enquiry</h2>
 
       <hr>
 
-      <form class="" action="" method="post">
+      <form class="" action="" method="POST" novalidate>
 
-        <label for="name"><i class="fas fa-user"></i> Name: </label> <br>
-        <input type="text" name="name" value=""> <br>
+        {{ form.hidden_tag() }}
 
-        <label for="email"><i class="fas fa-envelope"></i> Email: </label> <br>
-        <input type="email" name="email" value=""> <br>
+        <i class="fas fa-user"></i>
+        {{ form.name.label }}
+        {{ form.name }}
+        {% for error in form.name.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
 
-        <label for="message"><i class="fas fa-comment-alt"></i> Enquiry: </label> <br>
-        <textarea name="name" rows="8" cols="50"></textarea> <br>
+        <i class="fas fa-envelope"></i>
+        {{ form.email.label }}
+        {{ form.email }}
+        {% for error in form.email.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
 
-        <input type="submit" value="Submit">
+        <i class="fas fa-comment-alt"></i>
+        {{ form.enquiry.label }}
+        {{ form.enquiry }}
+        {% for error in form.enquiry.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+
+        {{ form.submit() }}
 
       </form>
 
