@@ -7,3 +7,4 @@ stecvenv
 logs
 
 .flaskenv
+sendgrid.env
