@@ -2,7 +2,7 @@
 from datetime import datetime, timedelta
 import unittest
 from app import app, db
-from app.models import Users, Posts
+from app.models import Users, UserPosts
 
 
 class UserModelCase(unittest.TestCase):
@@ -25,16 +25,14 @@ class UserModelCase(unittest.TestCase):
         self.assertFalse(u.check_password('testsfalse'))
         self.assertTrue(u.check_password('tests'))
 
-    # def test_avatar(self):
-    #     """Testing avatar generation."""
-    #     u = Users(Name='Abolore Mina', Username='Abololz',
-    #               Email='mina@tests.com')
-    #     self.assertEqual(u.avatar(128), ('https://www.gravatar.com/avatar/'
-    #                                      '205e460b479e2e5b48aec07710c08d50'
-    #                                      '?d=identicon&s=128'))
+    def test_users(self):
+        """Testing users."""
+        user = Users(Name='john doe', Username='john', Email='john@examp.com')
+        db.session.add(user)
+        db.session.commit()
 
-    def test_posts(self):
-        """Testing post."""
+    def test_userPosts(self):
+        """Testing user post."""
         # create four users
         u1 = Users(Name='john doe', Username='john', Email='john@example.com')
         u2 = Users(Name='susan wilson', Username='susan',
@@ -46,14 +44,14 @@ class UserModelCase(unittest.TestCase):
 
         # create four posts
         now = datetime.utcnow()
-        p1 = Posts(Subject='testing 1', Body="post from john", author=u1,
-                   Timestamp=now + timedelta(seconds=1))
-        p2 = Posts(Subject='testing 2', Body="post from susan", author=u2,
-                   Timestamp=now + timedelta(seconds=4))
-        p3 = Posts(Subject='testing 3', Body="post from mary", author=u3,
-                   Timestamp=now + timedelta(seconds=3))
-        p4 = Posts(Subject='testing 4', Body="post from david", author=u4,
-                   Timestamp=now + timedelta(seconds=2))
+        p1 = UserPosts(Body="post from john", author=u1,
+                       Timestamp=now + timedelta(seconds=1))
+        p2 = UserPosts(Body="post from susan", author=u2,
+                       Timestamp=now + timedelta(seconds=4))
+        p3 = UserPosts(Body="post from mary", author=u3,
+                       Timestamp=now + timedelta(seconds=3))
+        p4 = UserPosts(Body="post from david", author=u4,
+                       Timestamp=now + timedelta(seconds=2))
         db.session.add_all([p1, p2, p3, p4])
         db.session.commit()
 
