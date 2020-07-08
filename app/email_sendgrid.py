@@ -1,20 +1,26 @@
 """SendGrid Configuration."""
-# using SendGrid's Python Library
-# https://github.com/sendgrid/sendgrid-python
-import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
+from flask import render_template
+from flask_mail import Message
+from app import mail, app
+from config import Config
 
-message = Mail(
-    from_email='10541380@mydbs.ie',
-    to_emails='wlydeface@gmail.com',
-    subject='Sending with Twilio SendGrid is Fun',
-    html_content='<strong>and easy to do anywhere, even with Python</strong>')
-try:
-    sg = SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
-    response = sg.send(message)
-    # print(response.status_code)
-    # print(response.body)
-    # print(response.headers)
-except Exception as e:
-    print(e)
+# sender = app.config['MAIL_DEFAULT_SENDER']
+
+def send_email(subject, sender, recipients, text_body, html_body):
+    """Email information."""
+    msg = Message(subject, sender=sender, recipients=recipients)
+    msg.body = text_body
+    msg.html = html_body
+    mail.send(msg)
+
+
+def email_password_reset(user):
+    """Password reset email information."""
+    token = user.get_reset_password_token()
+    send_email('[STEC] Reset Your Password',
+               sender=sender,
+               recipients=[user.Email],
+               text_body=render_template('email/password_reset.txt',
+                                         user=user, token=token),
+               html_body=render_template('email/password_reset.html',
+                                         user=user, token=token))
