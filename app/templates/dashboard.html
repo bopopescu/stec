@@ -2,9 +2,9 @@
 
 {% block content %}
 
-    {% for post in posts %}
-    <p>{{ post.author.Username }} says: <b>{{ post.Body }}</b></p>
-    {% endfor %}
+{% for post in posts %}
+{% include 'adminposts.html' %}
+{% endfor %}
 
 
 {% endblock %}

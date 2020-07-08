@@ -29,6 +29,11 @@
 
     {{ form.submit() }}
 
+    <h4>
+        Forgot Your Password?
+        <a href="{{ url_for('password_reset_request') }}">Reset</a>
+    </h4>
+
     <h4>If you are not registered, <a href="{{ url_for('register') }}">Become a member</a></h4>
 
   </div>
