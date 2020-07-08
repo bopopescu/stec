@@ -79,8 +79,25 @@ class UserPostForm(FlaskForm):
     """User Post Form."""
 
     body = TextAreaField('Post', validators=[DataRequired(),
-                         Length(min=1, max=150)])
+                                             Length(min=1, max=150)])
     submit = SubmitField('Submit')
+
+
+class PasswordResetRequestForm(FlaskForm):
+    """Password Reset Request Form."""
+
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Submit')
+
+class PasswordResetForm(FlaskForm):
+    """Password Reset Form."""
+
+    password = PasswordField('Password', validators=[
+                DataRequired(), Length(min=7, max=15)])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), Length(min=7, max=15),
+                                       EqualTo('password')])
+    submit = SubmitField('Password Reset')
 
 
 # Adminstrator forms starts here
