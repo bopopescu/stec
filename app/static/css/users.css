@@ -204,6 +204,17 @@ aside ul li a:hover:not(.active) {
   padding-bottom: 10px;
 }
 
+/* Style for Articles and user posts */
+.articles h1{
+  text-align: center;
+}
+
+.articles {
+  border-bottom: 3px solid #1C9954;
+}
+
+
+
 /* Big screen style */
 @media screen and (min-width: 700px) {
   .bars {
