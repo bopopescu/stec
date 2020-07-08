@@ -2,8 +2,10 @@
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import db, login
+from app import db, login, app
 from hashlib import md5
+from time import time
+import jwt
 
 
 class Users(UserMixin, db.Model):
@@ -50,6 +52,22 @@ class Users(UserMixin, db.Model):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
+    def get_reset_password_token(self, expires_in=1200):
+        """Generating password reset token."""
+        return jwt.encode(
+            {'password_reset': self.UserID, 'exp': time() + expires_in},
+            app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        """verify password reset token."""
+        try:
+            UserID = jwt.decode(token, app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['password_reset']
+        except:
+            return
+        return Users.query.get(int(UserID))
+
 
 class UserPosts(db.Model):
     """User Posts table query."""
@@ -73,7 +91,7 @@ class Contacts(db.Model):
 
     ContactID = db.Column(db.Integer, primary_key=True)
     Name = db.Column(db.String(150), index=True, nullable=False)
-    Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
+    Email = db.Column(db.String(120), index=True, nullable=False)
     Enquiry = db.Column(db.Text(), nullable=False)
     Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
@@ -112,11 +130,6 @@ class Admins(UserMixin, db.Model):
     def get_id(self):
         """Return the user id for Flask-Login's requirements."""
         return self.AdminID
-
-    @login.user_loader
-    def load_user(AdminID):
-        """Query to retrieve user ID."""
-        return Admins.query.get(int(AdminID))
 
     def avatar(self, size):
         """Using email to generate an avatar."""
