@@ -20,4 +20,11 @@ $(document).ready(function() {
 
   });
 
+  // Function to remove flash message
+  $('.close').click(function() {
+
+     $('.message').hide();
+
+   });
+
 });
