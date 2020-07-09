@@ -34,11 +34,6 @@ class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[
                            DataRequired(), Length(min=5, max=15)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    dateofbirth = DateField(
-        'Date Of Birth', format='%m/%d/%Y', validators=[DataRequired()])
-    gender = RadioField('Gender', choices=[
-        ('F', 'Female'), ('M', 'Male'), ('O', 'Prefer not to choose')],
-                validators=[DataRequired()])
     password = PasswordField('Password', validators=[
                               DataRequired(), Length(min=7, max=15)])
     password2 = PasswordField(
@@ -88,7 +83,7 @@ class UserPostEditForm(FlaskForm):
 
     body = TextAreaField('Post', validators=[DataRequired(),
                                              Length(min=1, max=150)])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Update')
 
 
 class UserPostDeleteForm(FlaskForm):
@@ -96,7 +91,7 @@ class UserPostDeleteForm(FlaskForm):
 
     body = TextAreaField('Post', validators=[DataRequired(),
                                              Length(min=1, max=150)])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Delete')
 
 
 class PasswordResetRequestForm(FlaskForm):
@@ -104,6 +99,7 @@ class PasswordResetRequestForm(FlaskForm):
 
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Submit')
+
 
 class PasswordResetForm(FlaskForm):
     """Password Reset Form."""
@@ -114,6 +110,14 @@ class PasswordResetForm(FlaskForm):
         'Repeat Password', validators=[DataRequired(), Length(min=7, max=15),
                                        EqualTo('password')])
     submit = SubmitField('Password Reset')
+
+
+class UserMessageForm(FlaskForm):
+    """User Message Form."""
+
+    message = TextAreaField('Private Message', validators=[DataRequired(),
+                            Length(min=0, max=200)])
+    submit = SubmitField('Submit Message')
 
 
 # Adminstrator forms starts here
