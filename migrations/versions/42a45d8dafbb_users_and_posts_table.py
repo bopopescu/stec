@@ -26,7 +26,7 @@ def upgrade():
     sa.Column('Bio', sa.String(length=150), nullable=True),
     sa.Column('DateOfBirthday', sa.DateTime(), nullable=True),
     sa.Column('Gender', sa.String(length=30), nullable=True),
-    sa.Column('last_seen', sa.DateTime(), nullable=True),
+    sa.Column('LastSeen', sa.DateTime(), nullable=True),
     sa.Column('Password', sa.String(length=128), nullable=True),
     sa.PrimaryKeyConstraint('UserID')
     )
