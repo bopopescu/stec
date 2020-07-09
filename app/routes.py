@@ -3,7 +3,8 @@ from flask import render_template, flash, redirect, url_for, request
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
             UserPostForm, ContactForm, AdminLoginForm, AdminRegistrationForm, \
-            AdminPostForm, PasswordResetRequestForm, PasswordResetForm
+            AdminPostForm, PasswordResetRequestForm, PasswordResetForm, \
+            UserPostEditForm, UserPostDeleteForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Users, UserPosts, Contacts, Admins, Posts
 from werkzeug.urls import url_parse
@@ -81,6 +82,7 @@ def logout():
 @login_required
 def dashboard():
     """Render the user dashboard page."""
+    flash('Login successful')
     page = request.args.get('page', 1, type=int)
     posts = Posts.query.order_by(Posts.Timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
@@ -99,7 +101,7 @@ def profile(Username):
     """Render the user profile page."""
     user = Users.query.filter_by(Username=Username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    posts = UserPosts.query.order_by(UserPosts.Timestamp.desc()).paginate(
+    posts = UserPosts.query.filter(user.UserID==UserPosts.UserID).order_by(UserPosts.Timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('profile', Username=user.Username, page=posts.next_num)\
         if posts.has_next else None
@@ -140,14 +142,7 @@ def before_request():
 @login_required
 def members_post():
     """Render the member post page."""
-    form = UserPostForm()
     page = request.args.get('page', 1, type=int)
-    if form.validate_on_submit():
-        post = UserPosts(Body=form.body.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Post upload successful')
-        return redirect(url_for('members_post'))
     posts = UserPosts.query.order_by(UserPosts.Timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('members_post', page=posts.next_num) \
@@ -156,7 +151,7 @@ def members_post():
         if posts.has_prev else None
 
     return render_template('members_post.html', title='Members Post',
-                           form=form, posts=posts.items, next_url=next_url,
+                           posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
 
@@ -192,6 +187,74 @@ def password_reset(token):
         return redirect(url_for('login'))
     return render_template('password_reset.html',
                            title='Reset Password', form=form)
+
+
+@app.route('/codeofconduct', methods=['GET', 'POST'])
+@login_required
+def codeofconduct():
+    """Render the code of conduct page."""
+    return render_template('codeofconduct.html', title='STEC Code of Conduct')
+
+
+@app.route('/yourposts/<Username>', methods=['GET', 'POST'])
+@login_required
+def yourposts(Username):
+    """Render the current user post page."""
+    form = UserPostForm()
+    # editform = UserPostEditForm()
+
+    if form.validate_on_submit():
+        post = UserPosts(Body=form.body.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Post upload successful')
+        return redirect(url_for('members_post'))
+
+    user = Users.query.filter_by(Username=Username).first_or_404()
+    page = request.args.get('page', 1, type=int)
+    posts = UserPosts.query.filter(user.UserID == UserPosts.UserID).order_by(
+                                   UserPosts.Timestamp.desc()).paginate(
+                                   page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('profile', Username=user.Username, page=posts.next_num)\
+        if posts.has_next else None
+    prev_url = url_for('profile', Username=user.Username, page=posts.prev_num)\
+        if posts.has_prev else None
+    return render_template('yourposts.html', title='Your Post page', user=user,
+                           posts=posts.items, next_url=next_url, form=form,
+                           prev_url=prev_url)
+
+
+@app.route('/edit_post/<UserPostID>', methods=['GET', 'POST'])
+@login_required
+def edit_post(UserPostID):
+    """Render user post edit page."""
+    form = UserPostEditForm()
+    post = UserPosts.query.filter(UserPosts.UserPostID).first()
+    if form.validate_on_submit():
+        post.Body = form.body.data
+        db.session.commit()
+        flash('Post updated.')
+        return redirect(url_for('yourposts', Username=current_user.Username))
+    elif request.method == 'GET':
+        form.body.data = post.Body
+    return render_template('edit_post.html', title='Edit Post',
+                           form=form, post=post)
+
+@app.route('/delete_post/<UserPostID>', methods=['GET', 'POST'])
+@login_required
+def delete_post(UserPostID):
+    """Render user post edit page."""
+    form = UserPostDeleteForm()
+    post = UserPosts.query.filter(UserPosts.UserPostID).first()
+    if request.method == 'GET':
+        form.body.data = post.Body
+        db.session.remove(post)
+        db.session.commit()
+        flash('Post Deleted.')
+        return redirect(url_for('yourposts', Username=current_user.Username))
+
+    return render_template('delete_post.html', title='Delete Post',
+                           form=form, post=post)
 
 
 # # Adminstrator routes starts here
