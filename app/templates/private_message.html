@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<form class="stecform" action="" method="POST" novalidate>
+
+  <h2>Sending a Message to: {{ receiver }}</h2>
+
+  <div class="stecformfield">
+
+    {{ form.hidden_tag() }}
+
+    <i class="fas fa-comments"></i>
+    {{ form.message.label }}
+    {{ form.message }}
+    {% for error in form.message.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    {{ form.submit() }}
+
+
+  </div>
+
+</form>
+
+{% endblock %}
