@@ -1,12 +1,13 @@
 """Initializaing the application instance."""
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
             UserPostForm, ContactForm, AdminLoginForm, AdminRegistrationForm, \
             AdminPostForm, PasswordResetRequestForm, PasswordResetForm, \
-            UserPostEditForm, UserPostDeleteForm
+            UserPostEditForm, UserPostDeleteForm, UserMessageForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import Users, UserPosts, Contacts, Admins, Posts
+from app.models import Users, UserPosts, Contacts, Admins, Posts, \
+            UserMessages, Notifications
 from werkzeug.urls import url_parse
 from datetime import datetime
 from app.email_sendgrid import email_password_reset
@@ -46,6 +47,7 @@ def login():
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('dashboard')
+        flash('Login successful')
         return redirect(next_page)
     return render_template('login.html', title='Sign in', form=form)
 
@@ -59,9 +61,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         user = Users(Name=form.name.data, Username=form.username.data,
-                     Email=form.email.data,
-                     DateOfBirthday=form.dateofbirth.data,
-                     Gender=form.gender.data)
+                     Email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -82,7 +82,6 @@ def logout():
 @login_required
 def dashboard():
     """Render the user dashboard page."""
-    flash('Login successful')
     page = request.args.get('page', 1, type=int)
     posts = Posts.query.order_by(Posts.Timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
@@ -122,7 +121,7 @@ def edit_profile():
         current_user.Bio = form.bio.data
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('edit_profile'))
+        return redirect(url_for('profile', Username=current_user.Username) )
     elif request.method == 'GET':
         form.username.data = current_user.Username
         form.bio.data = current_user.Bio
@@ -134,11 +133,11 @@ def edit_profile():
 def before_request():
     """Render the date user login previously."""
     if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
+        current_user.LastSeen = datetime.utcnow()
         db.session.commit()
 
 
-@app.route('/members_post', methods=['GET', 'POST'])
+@app.route('/members_post')
 @login_required
 def members_post():
     """Render the member post page."""
@@ -189,7 +188,7 @@ def password_reset(token):
                            title='Reset Password', form=form)
 
 
-@app.route('/codeofconduct', methods=['GET', 'POST'])
+@app.route('/codeofconduct')
 @login_required
 def codeofconduct():
     """Render the code of conduct page."""
@@ -229,7 +228,7 @@ def yourposts(Username):
 def edit_post(UserPostID):
     """Render user post edit page."""
     form = UserPostEditForm()
-    post = UserPosts.query.filter(UserPosts.UserPostID).first()
+    post = UserPosts.query.filter_by(UserPostID=UserPostID).first_or_404()
     if form.validate_on_submit():
         post.Body = form.body.data
         db.session.commit()
@@ -240,21 +239,75 @@ def edit_post(UserPostID):
     return render_template('edit_post.html', title='Edit Post',
                            form=form, post=post)
 
+
 @app.route('/delete_post/<UserPostID>', methods=['GET', 'POST'])
 @login_required
 def delete_post(UserPostID):
     """Render user post edit page."""
     form = UserPostDeleteForm()
-    post = UserPosts.query.filter(UserPosts.UserPostID).first()
-    if request.method == 'GET':
-        form.body.data = post.Body
-        db.session.remove(post)
+    post = UserPosts.query.filter_by(UserPostID=UserPostID).first_or_404()
+    if form.validate_on_submit():
+        post.Body = form.body.data
+        db.session.delete(post)
         db.session.commit()
         flash('Post Deleted.')
         return redirect(url_for('yourposts', Username=current_user.Username))
+    elif request.method == 'GET':
+        form.body.data = post.Body
 
     return render_template('delete_post.html', title='Delete Post',
                            form=form, post=post)
+
+
+@app.route('/private_message/<receiver>', methods=['GET', 'POST'])
+@login_required
+def private_message(receiver):
+    """Render private message page."""
+    user = Users.query.filter_by(Username=receiver).first_or_404()
+    form = UserMessageForm()
+    if form.validate_on_submit():
+        msg = UserMessages(author=current_user, receiver=user,
+                           Body=form.message.data)
+        user.add_notification('unread_message', user.new_messages())
+        db.session.add(msg)
+        db.session.commit()
+        flash('Message sent successfully.')
+        return redirect(url_for('profile', Username=receiver))
+    return render_template('private_message.html', title='Private Message',
+                           form=form, receiver=receiver)
+
+
+@app.route('/view_messages')
+@login_required
+def view_messages():
+    """Render view message page."""
+    current_user.LastMessageReadTime = datetime.utcnow()
+    current_user.add_notification('unread_message', 0)
+    db.session.commit()
+    page = request.args.get('page', 1, type=int)
+    messages = current_user.MessageReceived.order_by(
+        UserMessages.Timestamp.desc()).paginate(
+            page, app.config['POSTS_PER_PAGE'], False)
+    next_url = url_for('view_messages', page=messages.next_num) \
+        if messages.has_next else None
+    prev_url = url_for('view_messages', page=messages.prev_num) \
+        if messages.has_prev else None
+    return render_template('view_messages.html', messages=messages.items,
+                           next_url=next_url, prev_url=prev_url)
+
+
+@app.route('/notifications')
+@login_required
+def notifications():
+    """Render Notifications page."""
+    since = request.args.get('since', 0.0, type=float)
+    notices = current_user.Notification.filter(
+        Notifications.Timestamp > since).order_by(Notifications.Timestamp.asc())
+    return jsonify([{
+        'Name': notice.Name,
+        'Data': notice.get_data(),
+        'Timestamp': notice.Timestamp
+    } for notice in notices])
 
 
 # # Adminstrator routes starts here
