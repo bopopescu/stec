@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<form class="stecform" action="" method="POST" novalidate>
+
+  <h2>Delete Profile</h2>
+
+  <div class="stecformfield">
+
+    {{ form.hidden_tag() }}
+
+    <i class="fas fa-user-tag"></i>
+    {{ form.body.label }}
+    {{ form.body }}
+    {% for error in form.body.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    {{ form.submit() }}
+
+
+  </div>
+
+</form>
+
+{% endblock %}
