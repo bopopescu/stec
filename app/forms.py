@@ -83,6 +83,22 @@ class UserPostForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class UserPostEditForm(FlaskForm):
+    """User Post Edit Form."""
+
+    body = TextAreaField('Post', validators=[DataRequired(),
+                                             Length(min=1, max=150)])
+    submit = SubmitField('Submit')
+
+
+class UserPostDeleteForm(FlaskForm):
+    """User Post Delete Form."""
+
+    body = TextAreaField('Post', validators=[DataRequired(),
+                                             Length(min=1, max=150)])
+    submit = SubmitField('Submit')
+
+
 class PasswordResetRequestForm(FlaskForm):
     """Password Reset Request Form."""
 
