@@ -25,10 +25,16 @@ $(document).ready(function() {
   });
 
   // Function to add active class to Navigation
-  $('.links').click(function () {
-    $('.links.active').removeClass('active');
-    $(this).addClass('active');
+  $('#links').click(function () {
+    $('#links').removeClass('active');
+    $('#links').addClass('active');
   });
 
+  /* function to toggle user post edit */
+  $('.write').on('click', function() {
+
+     $('.writepost').toggle();
+
+  });
 
 });
