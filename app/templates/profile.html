@@ -3,7 +3,7 @@
 {% block content %}
 
 <section>
-  
+
   <div class="posticon">
   {% if user == current_user %}
 
@@ -19,10 +19,16 @@
     <h1>{{ user.Name }}</h1>
     <p class="username">Username: {{ user.Username }}</p>
     {% if user.Bio %}<p>{{ user.Bio}}</p>{% endif %}
-    {% if user.last_seen %}
-    <p>Last seen: {{ moment(user.last_seen).format('LLLL') }}</p>
+    {% if user.LastSeen %}
+    <p>Last seen: {{ moment(user.LastSeen).format('LLLL') }}</p>
     {% endif %}
-    <p><button>Message</button></p>
+
+    <p><button>
+    {% if user != current_user %}
+    <a id="links" href="{{ url_for('private_message', receiver=user.Username) }}"><i class="fas fa-paper-plane"></i> Send Private Message</a>
+    {% endif %}
+    </button></p>
+
   </div>
 
 
