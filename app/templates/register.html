@@ -32,20 +32,6 @@
     <span>{{ error }}</span>
     {% endfor %}
 
-    <i class="fas fa-calendar-day"></i>
-    {{ form.dateofbirth.label }}
-    {{ form.dateofbirth }}
-    {% for error in form.dateofbirth.errors %}
-    <span>{{ error }}</span>
-    {% endfor %}
-
-    <i class="fas fa-smile"></i>
-    {{ form.gender.label }}
-    {{ form.gender }}
-    {% for error in form.gender.errors %}
-    <span>{{ error }}</span>
-    {% endfor %}
-
     <i class="fas fa-lock"></i>
     {{ form.password.label }}
     {{ form.password }}
