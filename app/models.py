@@ -6,6 +6,7 @@ from app import db, login, app
 from hashlib import md5
 from time import time
 import jwt
+import json
 
 
 class Users(UserMixin, db.Model):
@@ -19,11 +20,18 @@ class Users(UserMixin, db.Model):
                          unique=True, nullable=False)
     Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     Bio = db.Column(db.String(150))
-    DateOfBirthday = db.Column(db.DateTime)
-    Gender = db.Column(db.String(30))
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     Password = db.Column(db.String(128))
+    LastSeen = db.Column(db.DateTime, default=datetime.utcnow)
+    LastMessageReadTime = db.Column(db.DateTime)
     Posts = db.relationship('UserPosts', backref='author', lazy='dynamic')
+    MessageSent = db.relationship('UserMessages',
+                                  foreign_keys='UserMessages.SenderID',
+                                  backref='author', lazy='dynamic')
+    MessageReceived = db.relationship('UserMessages',
+                                      foreign_keys='UserMessages.ReceiverID',
+                                      backref='receiver', lazy='dynamic')
+    Notification = db.relationship('Notifications', backref='user',
+                                   lazy='dynamic')
 
     def set_password(self, Password):
         """To hash user's password."""
@@ -63,10 +71,21 @@ class Users(UserMixin, db.Model):
         """verify password reset token."""
         try:
             UserID = jwt.decode(token, app.config['SECRET_KEY'],
-                            algorithms=['HS256'])['password_reset']
+                                algorithms=['HS256'])['password_reset']
         except:
             return
         return Users.query.get(int(UserID))
+
+    def new_messages(self):
+        last_read_time = self.LastMessageReadTime or datetime(2000, 1, 1)
+        return UserMessages.query.filter_by(receiver=self).filter(
+            UserMessages.Timestamp > last_read_time).count()
+
+    def add_notification(self, name, data):
+        self.Notification.filter_by(Name=name).delete()
+        new = Notifications(Name=name, Payload_json=json.dumps(data), user=self)
+        db.session.add(new)
+        return new
 
 
 class UserPosts(db.Model):
@@ -100,6 +119,35 @@ class Contacts(db.Model):
         return '<{}: your enquiry is submitted>'.format(self.Name)
 
 
+class UserMessages(db.Model):
+    """User message table query."""
+
+    __tablename__ = 'UserMessages'
+
+    UserMessageID = db.Column(db.Integer, primary_key=True)
+    SenderID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
+    ReceiverID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
+    Body = db.Column(db.String(200))
+    Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '<User Message is: {}>'.format(self.Body)
+
+
+class Notifications(db.Model):
+    """Notification table query."""
+
+    __tablename__ = 'Notifications'
+
+    N_ID = db.Column(db.Integer, primary_key=True)
+    Name = db.Column(db.String(150), index=True)
+    UserID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
+    Timestamp = db.Column(db.Float, index=True, default=time)
+    Payload_json = db.Column(db.Text)
+
+    def get_data(self):
+        return json.loads(str(self.Payload_json))
+
 # Adminstrator models starts here
 class Admins(UserMixin, db.Model):
     """Admin table query."""
@@ -111,7 +159,7 @@ class Admins(UserMixin, db.Model):
     Username = db.Column(db.String(15), index=True,
                          unique=True, nullable=False)
     Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    LastSeen = db.Column(db.DateTime, default=datetime.utcnow)
     Password = db.Column(db.String(128))
     Posts = db.relationship('Posts', backref='author', lazy='dynamic')
 
