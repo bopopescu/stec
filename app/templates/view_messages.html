@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<h2>Private Messages</h2>
+
+{% for message in messages %}
+  <section class="">
+      <article class="Pmessage">
+          <h4>{{ message.Body }}</h4>
+          <p>Sent by: {{ message.author.Username.capitalize() }}</p>
+          <p>Delivered: {{ moment(message.Timestamp).fromNow() }}</p>
+      </article>
+  </section>
+{% endfor %}
+
+<div class="usermessages">
+  {% if prev_url %}
+  <a href="{{ prev_url }}">Newer messages</a>
+  {% endif %}
+  {% if next_url %}
+  <a href="{{ next_url }}">Older messages</a>
+  {% endif %}
+</div>
+
+{% endblock %}
