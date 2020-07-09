@@ -14,6 +14,10 @@ a {
   cursor: pointer;
 }
 
+h1 {
+  font-family: 'Playfair Display', serif;
+}
+
 h2, h3, h4 {
   font-family: 'Roboto Slab', serif;
 }
@@ -179,9 +183,13 @@ aside ul li a:hover:not(.active) {
   outline-color: #1C9954;
 }
 
-.admin textarea {
+textarea {
   resize: none;
   height: 200px;
+}
+
+.admin textarea {
+  height: 300px;
 }
 
 .stecform input[type=submit] {
@@ -204,6 +212,27 @@ aside ul li a:hover:not(.active) {
   padding-bottom: 10px;
 }
 
+.posticon, .posticon a {
+  color: #1C9954;
+  height: 35px;
+  width: 35px;
+  text-align: center;
+  cursor: pointer;
+  display: inline;
+}
+
+.posticon i {
+  padding: 12px;
+}
+
+.delete {
+  color: red;
+}
+
+.writepost {
+  display: none;
+}
+
 /* Style for Articles and user posts */
 .articles h1{
   text-align: center;
@@ -213,6 +242,35 @@ aside ul li a:hover:not(.active) {
   border-bottom: 3px solid #1C9954;
 }
 
+.codeofconduct {
+  text-align: justify;
+}
+
+.userpostnav {
+  margin: 20px 0;
+}
+
+.profilecard {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.profilecard img {
+  width: 100%;
+  height: 200px;
+}
+
+.profilecard .title {
+  color: grey;
+}
+
+.profilecard button {
+  width: 100%;
+}
+
+.profilecard button:hover {
+  opacity: 0.7;
+}
 
 
 /* Big screen style */
