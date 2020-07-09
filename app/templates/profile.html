@@ -3,34 +3,28 @@
 {% block content %}
 
 <section>
-
-  <table>
-    <tr>
-      <td><img src="{{ user.avatar(128) }}" alt="user avatar"></td>
-      <td>
-        <h1>Username: {{ user.Username }}</h1>
-        {% if user.Bio %}<p>{{ user.Bio}}</p>{% endif %}
-        {% if user.last_seen %}<p>Last seen on: {{ user.last_seen }}</p>
-        {% endif %}
-      </td>
-    </tr>
-  </table>
-
+  
+  <div class="posticon">
   {% if user == current_user %}
-  <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
-  {% endif %}
 
-  <hr>
+    <a href="{{ url_for('edit_profile') }}"><i class="fas fa-edit edit"> Edit profile</i></a>
+    <a href="{{ url_for('yourposts', Username=current_user.Username) }}"><i class="fas fa-pen write"> Posts</i></a>
 
-  {% for post in posts %}
-  {% include 'userposts.html' %}
-  {% endfor %}
-  {% if prev_url %}
-  <a href="{{ prev_url }}">Newer posts</a>
   {% endif %}
-  {% if next_url %}
-  <a href="{{ next_url }}">Older posts</a>
-  {% endif %}
+  </div>
+
+
+  <div class="profilecard">
+    <img src="{{ user.avatar(128) }}" alt="user avatar">
+    <h1>{{ user.Name }}</h1>
+    <p class="username">Username: {{ user.Username }}</p>
+    {% if user.Bio %}<p>{{ user.Bio}}</p>{% endif %}
+    {% if user.last_seen %}
+    <p>Last seen: {{ moment(user.last_seen).format('LLLL') }}</p>
+    {% endif %}
+    <p><button>Message</button></p>
+  </div>
+
 
 </section>
 
