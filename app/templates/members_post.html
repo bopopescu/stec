@@ -2,38 +2,20 @@
 
 {% block content %}
 
-
-<form class="stecform" action="" method="POST" novalidate>
-
-  <h2>Write a Post</h2>
-
-  <div class="stecformfield">
-
-    {{ form.hidden_tag() }}
-
-    <i class="fas fa-user-tag"></i>
-    {{ form.body.label }}
-    {{ form.body }}
-    {% for error in form.body.errors %}
-    <span>{{ error }}</span>
-    {% endfor %}
-
-    {{ form.submit() }}
-
-  </div>
-
-</form>
-
-<hr>
+<h1 align="center">Members Posts</h1>
 
 {% for post in posts %}
 {% include 'userposts.html' %}
 {% endfor %}
-{% if prev_url %}
-<a href="{{ prev_url }}">Newer posts</a>
-{% endif %}
-{% if next_url %}
-<a href="{{ next_url }}">Older posts</a>
-{% endif %}
+
+<div class="userpostnav">
+  {% if prev_url %}
+  <a href="{{ prev_url }}">Newer posts</a>
+  {% endif %}
+  {% if next_url %}
+  <a href="{{ next_url }}">Older posts</a>
+  {% endif %}
+</div>
+
 
 {% endblock %}
