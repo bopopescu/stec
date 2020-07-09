@@ -1,8 +1,8 @@
-<table>
-    <tr>
-        <td><img src="{{ post.author.avatar(36) }}" alt="user avatar"></td>
-        <td><b>{{ post.Body }}</b>
-          by: <a href="{{ url_for('profile',  Username=post.author.Username) }}"> {{ post.author.Username }} </a>
-          on {{ post.Timestamp }}</td>
-    </tr>
-</table>
+
+<section class="articles">
+    <article class="memberpost">
+        <h4>{{ post.Body }}</h4>
+        <p> Posted: {{ moment(post.Timestamp).fromNow() }}</p>
+        <p><img src="{{ post.author.avatar(36) }}" alt="user avatar"> by: <a href="{{ url_for('profile',  Username=post.author.Username) }}"> {{ post.author.Username }} </a></p>
+    </article>
+</section>
