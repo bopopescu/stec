@@ -116,14 +116,33 @@ class UserMessageForm(FlaskForm):
     """User Message Form."""
 
     message = TextAreaField('Private Message', validators=[DataRequired(),
-                            Length(min=0, max=200)])
+                            Length(min=10, max=200)])
     submit = SubmitField('Submit Message')
 
 
 # Adminstrator forms starts here
 class AdminPostForm(FlaskForm):
     """Admin Post Form."""
+
     subject = StringField('Title', validators=[DataRequired(), Length(min=10)])
-    body = TextAreaField('Post', validators=[DataRequired(),
+    body = TextAreaField('Article', validators=[DataRequired(),
                          Length(min=100)])
     submit = SubmitField('Submit')
+
+
+class AdminPostEditForm(FlaskForm):
+    """Admin Post Edit Form."""
+
+    subject = StringField('Title', validators=[DataRequired(), Length(min=10)])
+    body = TextAreaField('Article', validators=[DataRequired(),
+                         Length(min=100)])
+    submit = SubmitField('Update')
+
+
+class AdminPostDeleteForm(FlaskForm):
+    """Admin Post Delete Form."""
+
+    subject = StringField('Title', validators=[DataRequired(), Length(min=10)])
+    body = TextAreaField('Article', validators=[DataRequired(),
+                         Length(min=100)])
+    submit = SubmitField('Delete')
