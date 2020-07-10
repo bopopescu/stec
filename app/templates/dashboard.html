@@ -2,10 +2,19 @@
 
 {% block content %}
 
-<section class="articles">
-{% for post in posts %}
-{% include 'adminposts.html' %}
-{% endfor %}
-</section>
+  <section class="articles">
+    {% for post in posts %}
+      {% include 'adminposts.html' %}
+    {% endfor %}
+  </section>
+
+  <div class="sectMargin">
+    {% if prev_url %}
+      <a href="{{ prev_url }}">Newer articles</a>
+    {% endif %}
+    {% if next_url %}
+      <a href="{{ next_url }}">Older articles</a>
+    {% endif %}
+  </div>
 
 {% endblock %}
