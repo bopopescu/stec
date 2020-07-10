@@ -10,6 +10,7 @@ Flask-Migrate==2.5.3
 Flask-Moment==0.10.0
 Flask-SQLAlchemy==2.4.3
 Flask-WTF==0.14.3
+gunicorn==20.0.4
 idna==2.10
 itsdangerous==1.1.0
 Jinja2==2.11.2
@@ -18,6 +19,7 @@ MarkupSafe==1.1.1
 mysql-connector==2.2.9
 mysql-connector-python==8.0.20
 protobuf==3.12.2
+psycopg2-binary==2.8.5
 PyJWT==1.7.1
 PyMySQL==0.9.3
 python-dateutil==2.8.1
