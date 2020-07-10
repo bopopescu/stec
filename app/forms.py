@@ -4,7 +4,7 @@ from wtforms import StringField, PasswordField, BooleanField, \
         DateField, RadioField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, \
         Email, EqualTo, Length
-from app.models import Users, UserPosts, Contacts, Admins
+from app.models import Users, UserPosts, Contacts
 
 
 class ContactForm(FlaskForm):
@@ -121,41 +121,6 @@ class UserMessageForm(FlaskForm):
 
 
 # Adminstrator forms starts here
-class AdminLoginForm(FlaskForm):
-    """Admin Login Form."""
-
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember me')
-    submit = SubmitField('Sign in')
-
-
-class AdminRegistrationForm(FlaskForm):
-    """Admin Registration Form."""
-
-    name = StringField('Name', validators=[
-                       DataRequired(), Length(min=5, max=150)])
-    username = StringField('Username', validators=[
-                           DataRequired(), Length(min=5, max=15)])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[
-                              DataRequired(), Length(min=7, max=15)])
-    password2 = PasswordField(
-        'Repeat Password', validators=[DataRequired(), Length(min=7, max=15),
-                                       EqualTo('password')])
-    submit = SubmitField('Register')
-
-    def validate_username(self, Username):
-        user = Admins.query.filter_by(Username=Username.data).first()
-        if user is not None:
-            raise ValidationError('Username not available.')
-
-    def validate_email(self, Email):
-        user = Admins.query.filter_by(Email=Email.data).first()
-        if user is not None:
-            raise ValidationError('Account with this email address exists.')
-
-
 class AdminPostForm(FlaskForm):
     """Admin Post Form."""
     subject = StringField('Title', validators=[DataRequired(), Length(min=10)])
