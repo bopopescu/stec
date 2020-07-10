@@ -1,5 +1,8 @@
 """Initializaing the application instance."""
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, jsonify
+from werkzeug.urls import url_parse
+from itsdangerous import URLSafeTimedSerializer
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
             UserPostForm, ContactForm, AdminPostForm, \
@@ -9,9 +12,6 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Users, UserPosts, Contacts, Posts, \
             UserMessages, Notifications
-from werkzeug.urls import url_parse
-from datetime import datetime
-from itsdangerous import URLSafeTimedSerializer
 from app.email_sendgrid import email_password_reset, email_confirmation
 
 
@@ -25,7 +25,7 @@ def index():
                         Enquiry=form.enquiry.data)
         db.session.add(info)
         db.session.commit()
-        flash('Enquiry sent successfully!!!')
+        flash('Enquiry submitted successfully!!!')
         return redirect(url_for('index'))
     return render_template('index.html', title='Home', form=form)
 
@@ -72,16 +72,19 @@ def register():
         db.session.add(user)
         db.session.commit()
         email_confirmation(user)
-        flash('An email confirmation has been sent.')
+        flash('An email confirmation has been sent, check your email.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+
 @app.route('/confirm/<emailToken>', methods=['GET', 'POST'])
 def confirm_email(emailToken):
-    """Render the confirm page."""
+    """Render the email confirmation page."""
     try:
         serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-        Email = serializer.loads(emailToken, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=1800)
+        Email = serializer.loads(emailToken,
+                                 salt=app.config['SECURITY_PASSWORD_SALT'],
+                                 max_age=1800)
     except:
         return
 
@@ -100,7 +103,7 @@ def confirm_email(emailToken):
 def logout():
     """To logout."""
     logout_user()
-    flash("Logged out successfully.")
+    flash("Log out successful.")
     return redirect(url_for('login'))
 
 
@@ -123,11 +126,12 @@ def dashboard():
 @app.route('/profile/<Username>', methods=['GET', 'POST'])
 @login_required
 def profile(Username):
-    """Render the user profile page."""
+    """Render the user's profile page."""
     user = Users.query.filter_by(Username=Username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    posts = UserPosts.query.filter(user.UserID==UserPosts.UserID).order_by(UserPosts.Timestamp.desc()).paginate(
-        page, app.config['POSTS_PER_PAGE'], False)
+    posts = UserPosts.query.filter(user.UserID==UserPosts.UserID).order_by(
+                UserPosts.Timestamp.desc()).paginate(
+                    page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('profile', Username=user.Username, page=posts.next_num)\
         if posts.has_next else None
     prev_url = url_for('profile', Username=user.Username, page=posts.prev_num)\
@@ -146,8 +150,8 @@ def edit_profile():
         current_user.Username = form.username.data
         current_user.Bio = form.bio.data
         db.session.commit()
-        flash('Your changes have been saved.')
-        return redirect(url_for('profile', Username=current_user.Username) )
+        flash('Profile edit successful.')
+        return redirect(url_for('profile', Username=current_user.Username))
     elif request.method == 'GET':
         form.username.data = current_user.Username
         form.bio.data = current_user.Bio
@@ -157,7 +161,7 @@ def edit_profile():
 
 @app.before_request
 def before_request():
-    """Render the date user login previously."""
+    """Render the previous date the user logged in."""
     if current_user.is_authenticated:
         current_user.LastSeen = datetime.utcnow()
         db.session.commit()
@@ -166,7 +170,7 @@ def before_request():
 @app.route('/members_post')
 @login_required
 def members_post():
-    """Render the member post page."""
+    """Render the member posts page."""
     page = request.args.get('page', 1, type=int)
     posts = UserPosts.query.order_by(UserPosts.Timestamp.desc()).paginate(
         page, app.config['POSTS_PER_PAGE'], False)
@@ -174,8 +178,7 @@ def members_post():
         if posts.has_next else None
     prev_url = url_for('members_post', page=posts.prev_num) \
         if posts.has_prev else None
-
-    return render_template('members_post.html', title='Members Post',
+    return render_template('members_post.html', title='Member Posts',
                            posts=posts.items, next_url=next_url,
                            prev_url=prev_url)
 
@@ -190,10 +193,10 @@ def password_reset_request():
         user = Users.query.filter_by(Email=form.email.data).first()
         if user:
             email_password_reset(user)
-        flash('Check your email for the instructions to reset your password')
+        flash('Check your email for the link to reset your password')
         return redirect(url_for('login'))
     return render_template('password_reset_request.html',
-                           title='Reset Password Request', form=form)
+                           title='Password Reset Request', form=form)
 
 
 @app.route('/password_reset/<token>', methods=['GET', 'POST'])
@@ -208,10 +211,10 @@ def password_reset(token):
     if form.validate_on_submit():
         user.set_password(form.password.data)
         db.session.commit()
-        flash('Your password has been reset.')
+        flash('password reset successful.')
         return redirect(url_for('login'))
     return render_template('password_reset.html',
-                           title='Reset Password', form=form)
+                           title='Password Reset', form=form)
 
 
 @app.route('/codeofconduct')
@@ -235,15 +238,15 @@ def yourposts(Username):
     user = Users.query.filter_by(Username=Username).first_or_404()
     page = request.args.get('page', 1, type=int)
     posts = UserPosts.query.filter(user.UserID == UserPosts.UserID).order_by(
-                                   UserPosts.Timestamp.desc()).paginate(
-                                   page, app.config['POSTS_PER_PAGE'], False)
+        UserPosts.Timestamp.desc()).paginate(
+            page, app.config['POSTS_PER_PAGE'], False)
     next_url = url_for('profile', Username=user.Username, page=posts.next_num)\
         if posts.has_next else None
     prev_url = url_for('profile', Username=user.Username, page=posts.prev_num)\
         if posts.has_prev else None
-    return render_template('yourposts.html', title='Your Post page', user=user,
-                           posts=posts.items, next_url=next_url, form=form,
-                           prev_url=prev_url)
+    return render_template('yourposts.html', title='Personal Post',
+                           user=user, posts=posts.items, next_url=next_url,
+                           form=form, prev_url=prev_url)
 
 
 @app.route('/edit_post/<UserPostID>', methods=['GET', 'POST'])
@@ -255,7 +258,7 @@ def edit_post(UserPostID):
     if form.validate_on_submit():
         post.Body = form.body.data
         db.session.commit()
-        flash('Post updated.')
+        flash('Post updated')
         return redirect(url_for('yourposts', Username=current_user.Username))
     elif request.method == 'GET':
         form.body.data = post.Body
@@ -273,11 +276,10 @@ def delete_post(UserPostID):
         post.Body = form.body.data
         db.session.delete(post)
         db.session.commit()
-        flash('Post Deleted.')
+        flash('Post Deleted')
         return redirect(url_for('yourposts', Username=current_user.Username))
     elif request.method == 'GET':
         form.body.data = post.Body
-
     return render_template('delete_post.html', title='Delete Post',
                            form=form, post=post)
 
@@ -325,7 +327,8 @@ def notifications():
     """Render Notifications page."""
     since = request.args.get('since', 0.0, type=float)
     notices = current_user.Notification.filter(
-        Notifications.Timestamp > since).order_by(Notifications.Timestamp.asc())
+        Notifications.Timestamp > since).order_by(
+            Notifications.Timestamp.asc())
     return jsonify([{
         'Name': notice.Name,
         'Data': notice.get_data(),
@@ -349,7 +352,7 @@ def admin_dashboard():
         return render_template('admin_dashboard.html', title='Admin Dashboard',
                                posts=posts.items, next_url=next_url,
                                prev_url=prev_url)
-    flash('You are not an administrator.')
+    flash('You are not an administrator')
     return redirect(url_for('dashboard'))
 
 
@@ -366,8 +369,8 @@ def admin_post():
             db.session.commit()
             flash('Post upload successfully')
             return redirect(url_for('admin_post'))
-        return render_template('admin_post.html', title='Adminstrator Post',
-                                   form=form)
+        return render_template('admin_post.html', title='New Article',
+                               form=form)
     flash('You are not an administrator.')
     return redirect(url_for('dashboard'))
 
@@ -376,9 +379,12 @@ def admin_post():
 def admin_enquiry():
     """Render the member post page."""
     if current_user.StecAdmin==True:
+        current_user.LastEnquiryReadTime = datetime.utcnow()
+        db.session.commit()
         page = request.args.get('page', 1, type=int)
-        enquiries = Contacts.query.order_by(Contacts.Timestamp.desc()).paginate(
-            page, app.config['POSTS_PER_PAGE'], False)
+        enquiries = Contacts.query.order_by(Contacts.Timestamp.desc()
+                                            ).paginate(page,
+                                                       app.config['POSTS_PER_PAGE'], False)
         next_url = url_for('admin_enquiry', page=enquiries.next_num) \
             if enquiries.has_next else None
         prev_url = url_for('admin_enquiry', page=enquiries.prev_num) \
