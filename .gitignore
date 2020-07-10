@@ -9,3 +9,5 @@ migrations
 .flaskenv
 
 .DS_Store
+
+config.py
