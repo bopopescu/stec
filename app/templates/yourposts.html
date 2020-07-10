@@ -3,7 +3,7 @@
 {% block content %}
 
 <div class="posticon">
-   <i class="fas fa-pen write"> Write</i>
+  <i class="fas fa-pen write"> Write</i>
 </div>
 
 <form class="stecform writepost" action="" method="POST" novalidate>
@@ -31,29 +31,28 @@
 
 {% for post in posts %}
   <section class="articles">
-      <article class="yourpost">
-          <h4>{{ post.Body }}</h4>
-          <p> Posted: {{ moment(post.Timestamp).fromNow() }}</p>
-          <p><img src="{{ post.author.avatar(36) }}" alt="user avatar"> by: {{ post.author.Username }}</p>
-      </article>
-      <div class="posticon">
-      {% if user == current_user %}
+    <article class="yourpost">
+        <h4>{{ post.Body }}</h4>
+        <p> Posted: {{ moment(post.Timestamp).fromNow() }}</p>
+        <p><img src="{{ post.author.avatar(36) }}" alt="user avatar"> by: {{ post.author.Username }}</p>
+    </article>
+    <div class="posticon">
+    {% if user == current_user %}
 
-        <a href="{{ url_for('edit_post', UserPostID=post.UserPostID) }}"><i class="fas fa-edit edit"> Edit</i></a>
-        <a href="{{ url_for('delete_post', UserPostID=post.UserPostID) }}"><i class="fas fa-trash-alt delete"> Delete</i></a>
+      <a href="{{ url_for('edit_post', UserPostID=post.UserPostID) }}"><i class="fas fa-edit edit"> Edit</i></a>
+      <a href="{{ url_for('delete_post', UserPostID=post.UserPostID) }}"><i class="fas fa-trash-alt delete"> Delete</i></a>
 
-      {% endif %}
-      </div>
-
+    {% endif %}
+    </div>
   </section>
 {% endfor %}
 
-<div class="userpostnav">
+<div class="sectMargin">
   {% if prev_url %}
-  <a href="{{ prev_url }}">Newer posts</a>
+    <a href="{{ prev_url }}">Newer posts</a>
   {% endif %}
   {% if next_url %}
-  <a href="{{ next_url }}">Older posts</a>
+    <a href="{{ next_url }}">Older posts</a>
   {% endif %}
 </div>
 
