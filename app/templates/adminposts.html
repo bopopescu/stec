@@ -1,7 +1,5 @@
-
-    <h1>STEC Articles</h1>
-    <article class="adminpost">
-        <h2>{{ post.Subject.upper() }}</h2>
-        <p>Posted: {{ moment(post.Timestamp).fromNow() }} </p>
-        <p>{{ post.Body }}</p>
-    </article>
+<article class="adminpost">
+  <h2>{{ post.Subject.upper() }}</h2>
+  <p>Posted: {{ moment(post.Timestamp).fromNow() }} </p>
+  <p>{{ post.Body }}</p>
+</article>
