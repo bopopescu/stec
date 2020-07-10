@@ -53,20 +53,19 @@
 
     <!-- aside section -->
     <aside>
-
       <ul>
-        <li><a id="links" class="active" href="{{ url_for('dashboard') }}"><i class="far fa-newspaper"></i> STEC Articles</a></li>
-        <li><a id="links" href="{{ url_for('profile', Username=current_user.Username) }}"><i class="fas fa-user-alt"></i> Profile</a></li>
-        <li><a id="links" href="{{ url_for('members_post') }}"><i class="fas fa-book-reader"></i> Member Posts</a></li>
-        <li><a id="links" href="{{ url_for('codeofconduct') }}"><i class="fas fa-exclamation-triangle"></i> Code of Conduct</a></li>
+        <li><a href="{{ url_for('dashboard') }}"><i class="far fa-newspaper"></i> STEC Articles</a></li>
+        <li><a href="{{ url_for('profile', Username=current_user.Username) }}"><i class="fas fa-user-alt"></i> Profile</a></li>
+        <li><a href="{{ url_for('members_post') }}"><i class="fas fa-book-reader"></i> Member Posts</a></li>
+        <li><a href="{{ url_for('codeofconduct') }}"><i class="fas fa-exclamation-triangle"></i> Code of Conduct</a></li>
 
-        <li><a id="links" href="{{ url_for('view_messages') }}"><i class="fas fa-comments"></i> Messages
-           {% set new_messages = current_user.new_messages() %}
-          <span id="message_count" class="badge" style="visibility:{% if new_messages %}visible{% else %}hidden{% endif %};">
-          {{ new_messages }}</span>
-        </a></li>
+        <li><a href="{{ url_for('view_messages') }}"><i class="fas fa-comments"></i> Messages
+            {% set new_messages = current_user.new_messages() %}
+            <span id="message_count" class="badge" style="visibility:{% if new_messages %}visible{% else %}hidden{% endif %};">
+              {{ new_messages }}</span>
+          </a></li>
 
-        <li><a id="links" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
       </ul>
     </aside>
 
@@ -100,35 +99,36 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="/static/scripts/dashboard.js" charset="utf-8"></script>
   {% block scripts %}
-      {{ moment.include_moment() }}
+  {{ moment.include_moment() }}
 
-      <!-- script for unread_message -->
-      <script>
-      // script to automatically update Notification
-      function set_message_count(notice) {
-                  $('#message_count').text(notice);
-                  $('#message_count').css('visibility', notice ? 'visible' : 'hidden');
-              }
+  <!-- script for unread_message -->
+  <script>
+    // script to automatically update Notification
+    function set_message_count(notice) {
+      $('#message_count').text(notice);
+      $('#message_count').css('visibility', notice ? 'visible' : 'hidden');
+    }
 
 
-      // script for unread_message
-      {% if current_user.is_authenticated %}
-      $(function() {
-          var since = 0;
-          setInterval(function() {
-              $.ajax('{{ url_for('notifications') }}?since=' + since).done(
-                  function(notices) {
-                      for (var i = 0; i < notices.length; i++) {
-                          if (notices[i].Name == 'unread_message')
-                              set_message_count(notices[i].Data);
-                          since = notices[i].Timestamp;
-                      }
-                  }
-              );
-          }, 10000);
-      });
-      {% endif %}
-    </script>
+    // script for unread_message
+    {% if current_user.is_authenticated %}
+    $(function() {
+      var since = 0;
+      setInterval(function() {
+        $.ajax('{{ url_for('
+          notifications ') }}?since=' + since).done(
+          function(notices) {
+            for (var i = 0; i < notices.length; i++) {
+              if (notices[i].Name == 'unread_message')
+                set_message_count(notices[i].Data);
+              since = notices[i].Timestamp;
+            }
+          }
+        );
+      }, 10000);
+    }); {% endif %}
+  </script>
+
   {% endblock %}
 
 </body>
