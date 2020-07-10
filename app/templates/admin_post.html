@@ -4,20 +4,20 @@
 
 <form class="stecform admin" action="" method="POST" novalidate>
 
-  <h2>Write a Post</h2>
+  <h2>Post an Article</h2>
 
   <div class="stecformfield">
 
     {{ form.hidden_tag() }}
 
-    <i class="fas fa-user-tag"></i>
+    <i class="fas fa-h-square"></i>
     {{ form.subject.label }}
     {{ form.subject }}
     {% for error in form.subject.errors %}
     <span>{{ error }}</span>
     {% endfor %}
 
-    <i class="fas fa-user-tag"></i>
+    <i class="fas fa-rss-square"></i>
     {{ form.body.label }}
     {{ form.body }}
     {% for error in form.body.errors %}

@@ -1,9 +1,7 @@
 
-<section class="articles">
     <h1>STEC Articles</h1>
     <article class="adminpost">
         <h2>{{ post.Subject.upper() }}</h2>
-        <p>Posted: {{ moment(post.Timestamp).fromNow() }} by: STEC Team</p>
-        <h4>{{ post.Body }}</h4>
+        <p>Posted: {{ moment(post.Timestamp).fromNow() }} </p>
+        <p>{{ post.Body }}</p>
     </article>
-</section>
