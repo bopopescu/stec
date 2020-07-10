@@ -24,12 +24,6 @@ $(document).ready(function() {
 
   });
 
-  // Function to add active class to Navigation
-  $('#links').click(function () {
-    $('#links').removeClass('active');
-    $('#links').addClass('active');
-  });
-
   /* function to toggle user post edit */
   $('.write').on('click', function() {
 
@@ -42,6 +36,24 @@ $(document).ready(function() {
 
      $('.message').hide();
 
-   });
+  });
+
+  // Function to add active class to aside naviagation
+  $(function () {
+     setNavigation();
+  });
+
+  function setNavigation() {
+    var path = window.location.pathname;
+    path = path.replace(/\/$/, "");
+    path = decodeURIComponent(path);
+
+    $("aside ul li a").each(function () {
+       var href = $(this).attr('href');
+       if (path.substring(0, href.length) === href) {
+           $(this).closest('li').addClass('active');
+       }
+    });
+  }
 
 });
