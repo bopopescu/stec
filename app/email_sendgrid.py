@@ -2,15 +2,17 @@
 from flask import render_template
 from flask_mail import Message
 from app import mail, app
-from config import Config
 from threading import Thread
 from itsdangerous import URLSafeTimedSerializer
 
 sender = app.config['MAIL_DEFAULT_SENDER']
 
+
 def send_async_email(app, msg):
+    """Email to be async."""
     with app.app_context():
         mail.send(msg)
+
 
 def send_email(subject, sender, recipients, text_body, html_body):
     """Email information."""
@@ -31,10 +33,12 @@ def email_password_reset(user):
                html_body=render_template('email/password_reset.html',
                                          user=user, token=token))
 
+
 def email_confirmation(user):
     """Email confirmation information."""
     serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
-    emailToken = serializer.dumps(user.Email, salt=app.config['SECURITY_PASSWORD_SALT'])
+    emailToken = serializer.dumps(user.Email,
+                                  salt=app.config['SECURITY_PASSWORD_SALT'])
     send_email('[STEC] Email Confirmation',
                sender=sender,
                recipients=[user.Email],
