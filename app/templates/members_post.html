@@ -2,20 +2,19 @@
 
 {% block content %}
 
-<h1 align="center">Members Posts</h1>
+  <h1 align="center">Members Posts</h1>
 
-{% for post in posts %}
-{% include 'userposts.html' %}
-{% endfor %}
+  {% for post in posts %}
+    {% include 'userposts.html' %}
+  {% endfor %}
 
-<div class="userpostnav">
-  {% if prev_url %}
-  <a href="{{ prev_url }}">Newer posts</a>
-  {% endif %}
-  {% if next_url %}
-  <a href="{{ next_url }}">Older posts</a>
-  {% endif %}
-</div>
-
+  <div class="sectMargin">
+    {% if prev_url %}
+      <a href="{{ prev_url }}">Newer posts</a>
+    {% endif %}
+    {% if next_url %}
+      <a href="{{ next_url }}">Older posts</a>
+    {% endif %}
+  </div>
 
 {% endblock %}
