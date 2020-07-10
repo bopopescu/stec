@@ -14,6 +14,11 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'stec-web-developed'
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or dblink
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # For email confirmation
+    SECURITY_PASSWORD_SALT = 'stec-email-confirmation-formembers'
+
+    # No to show before Pagination
     POSTS_PER_PAGE = 2
 
     # sendgrid mail configuations
@@ -21,4 +26,6 @@ class Config(object):
     MAIL_PORT = 587
     MAIL_USE_TLS = True
     MAIL_USERNAME = 'apikey'
-    #remember to add api key and default sender
+    # remember to add sendgrid key and default sender
+    MAIL_PASSWORD = 'xxxxxxxx'
+    MAIL_DEFAULT_SENDER = 'xxxxxxxxxx'
