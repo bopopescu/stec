@@ -245,7 +245,7 @@ textarea {
   text-align: justify;
 }
 
-.userpostnav, .usermessages {
+.sectMargin, .usermessages, {
   margin: 20px 0;
 }
 
@@ -286,6 +286,10 @@ textarea {
   background: #1d2936;
   color: #F6F8FF;
   border-bottom: 6px solid #1C9954;
+}
+
+.Pmessages {
+  margin-bottom: 30px;
 }
 
 /* Big screen style */
