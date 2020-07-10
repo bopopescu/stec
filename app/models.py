@@ -20,10 +20,15 @@ class Users(UserMixin, db.Model):
                          unique=True, nullable=False)
     Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     Bio = db.Column(db.String(150))
-    Password = db.Column(db.String(128))
+    Password = db.Column(db.String(128), nullable=False)
     LastSeen = db.Column(db.DateTime, default=datetime.utcnow)
     LastMessageReadTime = db.Column(db.DateTime)
-    Posts = db.relationship('UserPosts', backref='author', lazy='dynamic')
+    RegisteredDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    StecAdmin = db.Column(db.Boolean, nullable=False, default=False)
+    Confirmed = db.Column(db.Boolean, nullable=False, default=False)
+    ConfirmedDate = db.Column(db.DateTime)
+    UserPosts = db.relationship('UserPosts', backref='author', lazy='dynamic')
+    StecPosts = db.relationship('Posts', backref='author', lazy='dynamic')
     MessageSent = db.relationship('UserMessages',
                                   foreign_keys='UserMessages.SenderID',
                                   backref='author', lazy='dynamic')
@@ -60,7 +65,7 @@ class Users(UserMixin, db.Model):
         return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
             digest, size)
 
-    def get_reset_password_token(self, expires_in=1200):
+    def get_reset_password_token(self, expires_in=1800):
         """Generating password reset token."""
         return jwt.encode(
             {'password_reset': self.UserID, 'exp': time() + expires_in},
@@ -73,7 +78,7 @@ class Users(UserMixin, db.Model):
             UserID = jwt.decode(token, app.config['SECRET_KEY'],
                                 algorithms=['HS256'])['password_reset']
         except:
-            return
+            return False
         return Users.query.get(int(UserID))
 
     def new_messages(self):
@@ -148,44 +153,8 @@ class Notifications(db.Model):
     def get_data(self):
         return json.loads(str(self.Payload_json))
 
+
 # Adminstrator models starts here
-class Admins(UserMixin, db.Model):
-    """Admin table query."""
-
-    __tablename__ = 'Admins'
-
-    AdminID = db.Column(db.Integer, primary_key=True)
-    Name = db.Column(db.String(150), index=True, nullable=False)
-    Username = db.Column(db.String(15), index=True,
-                         unique=True, nullable=False)
-    Email = db.Column(db.String(120), index=True, unique=True, nullable=False)
-    LastSeen = db.Column(db.DateTime, default=datetime.utcnow)
-    Password = db.Column(db.String(128))
-    Posts = db.relationship('Posts', backref='author', lazy='dynamic')
-
-    def set_password(self, Password):
-        """To hash user's password."""
-        self.Password = generate_password_hash(Password)
-
-    def check_password(self, Password):
-        """To verify user's password hash."""
-        return check_password_hash(self.Password, Password)
-
-    def __repr__(self):
-        """For testing."""
-        return '<Your username is: {}>'.format(self.Username)
-
-    def get_id(self):
-        """Return the user id for Flask-Login's requirements."""
-        return self.AdminID
-
-    def avatar(self, size):
-        """Using email to generate an avatar."""
-        digest = md5(self.Email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
-
-
 class Posts(db.Model):
     """Posts table query."""
 
@@ -195,7 +164,7 @@ class Posts(db.Model):
     Subject = db.Column(db.String(100), nullable=False)
     Body = db.Column(db.Text(), nullable=False)
     Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    AdminID = db.Column(db.Integer, db.ForeignKey('Admins.AdminID'))
+    StecAdminID = db.Column(db.Integer, db.ForeignKey('Users.UserID'))
 
     def __repr__(self):
         """For testing."""
