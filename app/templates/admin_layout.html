@@ -53,12 +53,11 @@
 
     <!-- aside section -->
     <aside>
-
       <ul>
-        <li><a id="links" class="active" href="{{ url_for('admin_dashboard') }}"><i class="far fa-newspaper"></i> STEC Articles</a></li>
-        <li><a id="links" href="{{ url_for('admin_post') }}"><i class="fas fa-pen write"></i> New Article </a></li>
-        <li><a id="links" href="{{ url_for('admin_enquiry') }}"><i class="fas fa-comment-alt"></i> Enquiry </a></li>
-        <li><a id="links" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
+        <li><a href="{{ url_for('admin_dashboard') }}"><i class="far fa-newspaper"></i> STEC Articles</a></li>
+        <li><a href="{{ url_for('admin_post') }}"><i class="fas fa-pen write"></i> New Article </a></li>
+        <li><a href="{{ url_for('admin_enquiry') }}"><i class="fas fa-comment-alt"></i> Enquiry </a></li>
+        <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Log out</a></li>
       </ul>
     </aside>
 
@@ -92,7 +91,7 @@
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="/static/scripts/dashboard.js" charset="utf-8"></script>
   {% block scripts %}
-      {{ moment.include_moment() }}
+  {{ moment.include_moment() }}
   {% endblock %}
 
 </body>
