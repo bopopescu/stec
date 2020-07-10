@@ -1,12 +1,12 @@
 """Initializaing the application instance."""
 from datetime import datetime
+from hashlib import md5
+from time import time
+import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import db, login, app
-from hashlib import md5
-from time import time
 import jwt
-import json
 
 
 class Users(UserMixin, db.Model):
@@ -23,7 +23,8 @@ class Users(UserMixin, db.Model):
     Password = db.Column(db.String(128), nullable=False)
     LastSeen = db.Column(db.DateTime, default=datetime.utcnow)
     LastMessageReadTime = db.Column(db.DateTime)
-    RegisteredDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    RegisteredDate = db.Column(db.DateTime, nullable=False,
+                               default=datetime.utcnow)
     StecAdmin = db.Column(db.Boolean, nullable=False, default=False)
     Confirmed = db.Column(db.Boolean, nullable=False, default=False)
     ConfirmedDate = db.Column(db.DateTime)
@@ -88,7 +89,8 @@ class Users(UserMixin, db.Model):
 
     def add_notification(self, name, data):
         self.Notification.filter_by(Name=name).delete()
-        new = Notifications(Name=name, Payload_json=json.dumps(data), user=self)
+        new = Notifications(Name=name, Payload_json=json.dumps(data),
+                            user=self)
         db.session.add(new)
         return new
 
@@ -136,6 +138,7 @@ class UserMessages(db.Model):
     Timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
+        """For testing."""
         return '<User Message is: {}>'.format(self.Body)
 
 
@@ -151,6 +154,7 @@ class Notifications(db.Model):
     Payload_json = db.Column(db.Text)
 
     def get_data(self):
+        """Show Notifications."""
         return json.loads(str(self.Payload_json))
 
 
@@ -168,5 +172,5 @@ class Posts(db.Model):
 
     def __repr__(self):
         """For testing."""
-        return '<Post subject: {} and body: {}>'.format(self.Subject
-                                                        , self.Body)
+        return '<Post subject: {} and body: {}>'.format(self.Subject,
+                                                        self.Body)
