@@ -2,15 +2,17 @@
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
-            UserPostForm, ContactForm, AdminLoginForm, AdminRegistrationForm, \
-            AdminPostForm, PasswordResetRequestForm, PasswordResetForm, \
-            UserPostEditForm, UserPostDeleteForm, UserMessageForm
+            UserPostForm, ContactForm, AdminPostForm, \
+            PasswordResetRequestForm, PasswordResetForm, \
+            UserPostEditForm, UserPostDeleteForm, UserMessageForm, \
+            AdminPostEditForm, AdminPostDeleteForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import Users, UserPosts, Contacts, Admins, Posts, \
+from app.models import Users, UserPosts, Contacts, Posts, \
             UserMessages, Notifications
 from werkzeug.urls import url_parse
 from datetime import datetime
-from app.email_sendgrid import email_password_reset
+from itsdangerous import URLSafeTimedSerializer
+from app.email_sendgrid import email_password_reset, email_confirmation
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,7 +34,9 @@ def index():
 def login():
     """Render the Sign in page."""
     # To redirect authenticated/logged in user
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.StecAdmin==True:
+        return redirect(url_for('admin_dashboard'))
+    elif current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
@@ -56,18 +60,40 @@ def login():
 def register():
     """Render the registration page."""
     # To redirect authenticated/logged in user
-    if current_user.is_authenticated:
+    if current_user.is_authenticated and current_user.StecAdmin==True:
+        return redirect(url_for('admin_dashboard'))
+    elif current_user.is_authenticated:
         return redirect(url_for('dashboard'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = Users(Name=form.name.data, Username=form.username.data,
-                     Email=form.email.data)
+                     Email=form.email.data, Confirmed=False)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered member of STEC!!!')
+        email_confirmation(user)
+        flash('An email confirmation has been sent.')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
+
+@app.route('/confirm/<emailToken>', methods=['GET', 'POST'])
+def confirm_email(emailToken):
+    """Render the confirm page."""
+    try:
+        serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+        Email = serializer.loads(emailToken, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=1800)
+    except:
+        return
+
+    user = Users.query.filter_by(Email=Email).first_or_404()
+
+    user.Confirmed = True
+    user.ConfirmedDate = datetime.utcnow()
+    db.session.add(user)
+    db.session.commit()
+
+    flash('Email confirmation successful, Welcome to STEC!!!')
+    return redirect(url_for('login'))
 
 
 @app.route('/logout')
@@ -200,15 +226,12 @@ def codeofconduct():
 def yourposts(Username):
     """Render the current user post page."""
     form = UserPostForm()
-    # editform = UserPostEditForm()
-
     if form.validate_on_submit():
         post = UserPosts(Body=form.body.data, author=current_user)
         db.session.add(post)
         db.session.commit()
         flash('Post upload successful')
         return redirect(url_for('members_post'))
-
     user = Users.query.filter_by(Username=Username).first_or_404()
     page = request.args.get('page', 1, type=int)
     posts = UserPosts.query.filter(user.UserID == UserPosts.UserID).order_by(
@@ -310,102 +333,103 @@ def notifications():
     } for notice in notices])
 
 
-# # Adminstrator routes starts here
-# @app.route('/admin_login', methods=['GET', 'POST'])
-# def admin_login():
-#     """Render the Sign in page."""
-#     # To redirect authenticated/logged in admins
-#     if current_user.is_authenticated:
-#         return redirect(url_for('admin_dashboard'))
-#     form = AdminLoginForm()
-#     if form.validate_on_submit():
-#         # Query database to check admin credentials
-#         admin = Admins.query.filter_by(Username=form.username.data).first()
-#         if admin is None or not admin.check_password(form.password.data):
-#             # Redirect if admin credentials is incorrect
-#             flash('Invalid username or password')
-#             return redirect(url_for('admin_login'))
-#         login_user(admin, remember=form.remember_me.data)
-#         # Redirect if admin credentials is correct
-#         next_page = request.args.get('next')
-#         if not next_page or url_parse(next_page).netloc != '':
-#             next_page = url_for('admin_dashboard')
-#         return redirect(next_page)
-#     return render_template('admin_login.html', title='Admin Sign in',
-#                            form=form)
-#
-#
-# @app.route('/admin_register', methods=['GET', 'POST'])
-# def admin_register():
-#     """Render the registration page."""
-#     # To redirect authenticated/logged in admins
-#     if current_user.is_authenticated:
-#         return redirect(url_for('admin_dashboard'))
-#     form = AdminRegistrationForm()
-#     if form.validate_on_submit():
-#         admin = Admins(Name=form.name.data, Username=form.username.data,
-#                        Email=form.email.data)
-#         admin.set_password(form.password.data)
-#         db.session.add(admin)
-#         db.session.commit()
-#         flash('Congratulations, you are an adminstrator of STEC!!!')
-#         return redirect(url_for('admin_login'))
-#     return render_template('admin_register.html', title='Admin Register',
-#                            form=form)
-#
-#
-# @app.route('/admin_logout')
-# def admin_logout():
-#     """To logout."""
-#     logout_user()
-#     return redirect(url_for('admin_login'))
-#
-#
-# @app.route('/admin_dashboard', methods=['GET', 'POST'])
-# @login_required
-# def admin_dashboard():
-#     """Render the user dashboard page."""
-#     page = request.args.get('page', 1, type=int)
-#     posts = Posts.query.order_by(Posts.Timestamp.desc()).paginate(
-#         page, app.config['POSTS_PER_PAGE'], False)
-#     next_url = url_for('admin_post', page=posts.next_num) \
-#         if posts.has_next else None
-#     prev_url = url_for('admin_post', page=posts.prev_num) \
-#         if posts.has_prev else None
-#
-#     return render_template('admin_dashboard.html', title='Admin Dashboard',
-#                            posts=posts.items, next_url=next_url,
-#                            prev_url=prev_url)
-#
-#
-# @app.route('/admin_post', methods=['GET', 'POST'])
-# @login_required
-# def admin_post():
-#     """Render the member post page."""
-#     form = AdminPostForm()
-#     if form.validate_on_submit():
-#         post = Posts(Subject=form.subject.data, Body=form.body.data,
-#                      author=current_user)
-#         db.session.add(post)
-#         db.session.commit()
-#         flash('Post upload successfully')
-#         return redirect(url_for('admin_post'))
-#     return render_template('admin_post.html', title='Adminstrator Post',
-#                            form=form)
-#
-#
-# @app.route('/admin_enquiry', methods=['GET', 'POST'])
-# @login_required
-# def admin_enquiry():
-#     """Render the member post page."""
-#     page = request.args.get('page', 1, type=int)
-#     enquiries = Contacts.query.order_by(Contacts.Timestamp.desc()).paginate(
-#         page, app.config['POSTS_PER_PAGE'], False)
-#     next_url = url_for('admin_enquiry', page=enquiries.next_num) \
-#         if enquiries.has_next else None
-#     prev_url = url_for('admin_enquiry', page=enquiries.prev_num) \
-#         if enquiries.has_prev else None
-#
-#     return render_template('admin_enquiry.html', title='User Enquiry',
-#                            enquiries=enquiries.items, next_url=next_url,
-#                            prev_url=prev_url)
+# Adminstrator routes starts here
+@app.route('/admin_dashboard', methods=['GET', 'POST'])
+@login_required
+def admin_dashboard():
+    """Render the user dashboard page."""
+    if current_user.StecAdmin==True:
+        page = request.args.get('page', 1, type=int)
+        posts = Posts.query.order_by(Posts.Timestamp.desc()).paginate(
+            page, app.config['POSTS_PER_PAGE'], False)
+        next_url = url_for('admin_post', page=posts.next_num) \
+            if posts.has_next else None
+        prev_url = url_for('admin_post', page=posts.prev_num) \
+            if posts.has_prev else None
+        return render_template('admin_dashboard.html', title='Admin Dashboard',
+                               posts=posts.items, next_url=next_url,
+                               prev_url=prev_url)
+    flash('You are not an administrator.')
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/admin_post', methods=['GET', 'POST'])
+@login_required
+def admin_post():
+    """Render the member post page."""
+    if current_user.StecAdmin==True:
+        form = AdminPostForm()
+        if form.validate_on_submit():
+            post = Posts(Subject=form.subject.data, Body=form.body.data,
+                         author=current_user)
+            db.session.add(post)
+            db.session.commit()
+            flash('Post upload successfully')
+            return redirect(url_for('admin_post'))
+        return render_template('admin_post.html', title='Adminstrator Post',
+                                   form=form)
+    flash('You are not an administrator.')
+    return redirect(url_for('dashboard'))
+
+@app.route('/admin_enquiry', methods=['GET', 'POST'])
+@login_required
+def admin_enquiry():
+    """Render the member post page."""
+    if current_user.StecAdmin==True:
+        page = request.args.get('page', 1, type=int)
+        enquiries = Contacts.query.order_by(Contacts.Timestamp.desc()).paginate(
+            page, app.config['POSTS_PER_PAGE'], False)
+        next_url = url_for('admin_enquiry', page=enquiries.next_num) \
+            if enquiries.has_next else None
+        prev_url = url_for('admin_enquiry', page=enquiries.prev_num) \
+            if enquiries.has_prev else None
+        return render_template('admin_enquiry.html', title='User Enquiry',
+                               enquiries=enquiries.items, next_url=next_url,
+                               prev_url=prev_url)
+    flash('You are not an administrator.')
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/edit_article/<PostID>', methods=['GET', 'POST'])
+@login_required
+def edit_article(PostID):
+    """Render Admin post edit page."""
+    if current_user.StecAdmin==True:
+        form = AdminPostEditForm()
+        post = Posts.query.filter_by(PostID=PostID).first_or_404()
+        if form.validate_on_submit():
+            post.Subject = form.subject.data
+            post.Body = form.body.data
+            db.session.commit()
+            flash('Article updated.')
+            return redirect(url_for('admin_dashboard'))
+        elif request.method == 'GET':
+            form.subject.data = post.Subject
+            form.body.data = post.Body
+        return render_template('edit_article.html', title='Edit Article',
+                               form=form, post=post)
+    flash('You are not an administrator.')
+    return redirect(url_for('dashboard'))
+
+
+@app.route('/delete_article/<PostID>', methods=['GET', 'POST'])
+@login_required
+def delete_article(PostID):
+    """Render Admin post edit page."""
+    if current_user.StecAdmin==True:
+        form = AdminPostDeleteForm()
+        post = Posts.query.filter_by(PostID=PostID).first_or_404()
+        if form.validate_on_submit():
+            post.Subject = form.subject.data
+            post.Body = form.body.data
+            db.session.delete(post)
+            db.session.commit()
+            flash('Post Deleted.')
+            return redirect(url_for('admin_dashboard'))
+        elif request.method == 'GET':
+            form.subject.data = post.Subject
+            form.body.data = post.Body
+        return render_template('delete_article.html', title='Delete Article',
+                               form=form, post=post)
+    flash('You are not an administrator.')
+    return redirect(url_for('dashboard'))
