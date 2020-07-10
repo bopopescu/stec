@@ -1,0 +1,34 @@
+{% extends 'admin_layout.html' %}
+
+{% block content %}
+
+<form class="stecform" action="" method="POST" novalidate>
+
+  <h2>Delete Article</h2>
+
+  <div class="stecformfield">
+
+    {{ form.hidden_tag() }}
+
+    <i class="fas fa-h-square"></i>
+    {{ form.subject.label }}
+    {{ form.subject }}
+    {% for error in form.subject.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    <i class="fas fa-rss-square"></i>
+    {{ form.body.label }}
+    {{ form.body }}
+    {% for error in form.body.errors %}
+    <span>{{ error }}</span>
+    {% endfor %}
+
+    {{ form.submit() }}
+
+
+  </div>
+
+</form>
+
+{% endblock %}
