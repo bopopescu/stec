@@ -27,8 +27,8 @@ class Config(object):
     MAIL_USE_TLS = True
     MAIL_USERNAME = 'apikey'
     # remember to add sendgrid key and default sender
-    MAIL_PASSWORD = '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'
-    MAIL_DEFAULT_SENDER = 'STEC TEAM <10541380@mydbs.ie>'
+    MAIL_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
+    MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
 
     # heroku log
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')

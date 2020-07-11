@@ -4,9 +4,6 @@ stecvenv
 
 logs
 
-migrations
-
 .flaskenv
 
 .DS_Store
-
