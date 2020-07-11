@@ -1,6 +1,5 @@
 """Initializaing the application instance."""
 from datetime import datetime
-from hashlib import md5
 from time import time
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -59,12 +58,6 @@ class Users(UserMixin, db.Model):
     def load_user(UserID):
         """Query to retrieve user ID."""
         return Users.query.get(int(UserID))
-
-    def avatar(self, size):
-        """Using email to generate an avatar."""
-        digest = md5(self.Email.lower().encode('utf-8')).hexdigest()
-        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(
-            digest, size)
 
     def get_reset_password_token(self, expires_in=1800):
         """Generating password reset token."""

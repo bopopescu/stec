@@ -115,8 +115,7 @@
     $(function() {
       var since = 0;
       setInterval(function() {
-        $.ajax('{{ url_for('
-          notifications ') }}?since=' + since).done(
+        $.ajax('{{ url_for('notifications') }}?since=' + since).done(
           function(notices) {
             for (var i = 0; i < notices.length; i++) {
               if (notices[i].Name == 'unread_message')

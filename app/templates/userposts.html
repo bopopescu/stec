@@ -1,8 +1,8 @@
 
 <section class="articles">
     <article class="memberpost">
-        <h4>{{ post.Body }}</h4>
+        <h2>{{ post.Body }}</h2>
         <p> Posted: {{ moment(post.Timestamp).fromNow() }}</p>
-        <p><img src="{{ post.author.avatar(36) }}" alt="user avatar"> by: <a href="{{ url_for('profile',  Username=post.author.Username) }}"> {{ post.author.Username }} </a></p>
+        <h3>By: <a href="{{ url_for('profile',  Username=post.author.Username) }}"> {{ post.author.Username }} </a></h3>
     </article>
 </section>

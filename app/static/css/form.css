@@ -87,6 +87,10 @@ header {
   float: right;
 }
 
+main {
+  min-height: 80vh;
+}
+
 /* form style */
 .stecform {
   border: 3px solid #1d2936;
@@ -145,10 +149,6 @@ footer span {
 @media screen and (min-width: 700px) {
   footer span {
     float: right;
-  }
-
-  main {
-    min-height: 647px;
   }
 
   .stecform {

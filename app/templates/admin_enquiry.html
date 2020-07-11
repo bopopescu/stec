@@ -4,19 +4,19 @@
 
   <section class="Pmessages">
 
-    <h2 align="center">User's Enquiries</h2>
+    <h1 align="center">Enquiries</h1>
 
     {% for enquiry in enquiries %}
 
       <article class="Pmessage">
-        <h4>{{ enquiry.Enquiry }}</h4>
-        <p>Sent by: {{ enquiry.Name.capitalize() }}</p>
-        <p>Email: {{ enquiry.Email }} </p>
+        <h2>{{ enquiry.Enquiry }}</h2>
+        <h4>Sent by: {{ enquiry.Name.capitalize() }}</h4>
+        <h4>Email: {{ enquiry.Email }} </h4>
         <p>Delivered: {{ moment(enquiry.Timestamp).fromNow() }}</p>
       </article>
 
     {% endfor %}
-    
+
   </section>
 
 {% endblock %}

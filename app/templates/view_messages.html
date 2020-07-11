@@ -2,17 +2,18 @@
 
 {% block content %}
 
-<h2>Private Messages</h2>
+<h1 align="center">Private Messages</h1>
 
-{% for message in messages %}
-  <section class="">
-      <article class="Pmessage">
-          <h4>{{ message.Body }}</h4>
-          <p>Sent by: {{ message.author.Username.capitalize() }}</p>
-          <p>Delivered: {{ moment(message.Timestamp).fromNow() }}</p>
-      </article>
-  </section>
-{% endfor %}
+  {% for message in messages %}
+      <section class="">
+          <article class="Pmessage">
+              <h4>{{ message.Body }}</h4>
+              <p>Sent by: {{ message.author.Username.capitalize() }}</p>
+              <p>Delivered: {{ moment(message.Timestamp).fromNow() }}</p>
+          </article>
+      </section>
+
+  {% endfor %}
 
 <div class="usermessages">
   {% if prev_url %}

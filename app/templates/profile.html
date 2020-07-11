@@ -14,23 +14,24 @@
   </div>
 
 
-  <div class="profilecard">
-    <img src="{{ user.avatar(128) }}" alt="user avatar">
-    <h1>{{ user.Name }}</h1>
-    <p class="username">Username: {{ user.Username }}</p>
-    {% if user.Bio %}<p>{{ user.Bio}}</p>{% endif %}
-    {% if user.LastSeen %}
-    <p>Last seen: {{ moment(user.LastSeen).format('LLLL') }}</p>
+  <div class="bio">
+    <h1>NAME: {{ user.Name }} (username: {{ user.Username }})</h1>
+    <h2>BIO: {% if user.Bio %} {{ user.Bio}} {% else %} Information not available {% endif %} </h2>
+    <h2>Email: {{ user.Email}} </h2>
+    <h3>Been a member since: {{ moment(user.RegisteredDate).format('LL') }}</h3>
+
+    {% if user == current_user %}
+    <p>Last seen: {% if user.LastSeen %} {{ moment(user.LastSeen).format('LLLL') }} {% endif %} </p>
     {% endif %}
 
-    <p><button>
     {% if user != current_user %}
+    <p><button>
     <a id="links" href="{{ url_for('private_message', receiver=user.Username) }}"><i class="fas fa-paper-plane"></i> Send Private Message</a>
-    {% endif %}
     </button></p>
+    {% endif %}
+
 
   </div>
-
 
 </section>
 

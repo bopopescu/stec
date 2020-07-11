@@ -16,6 +16,7 @@ a {
 
 h1 {
   font-family: 'Playfair Display', serif;
+  font-style: italic;
 }
 
 h2, h3, h4 {
@@ -245,31 +246,16 @@ textarea {
   text-align: justify;
 }
 
-.sectMargin, .usermessages, {
+.sectMargin, .usermessages{
   margin: 20px 0;
 }
 
-.profilecard {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  text-align: center;
-  width: 100%;
+.bio button{
+  opacity: .7;
 }
 
-.profilecard img {
-  height: 200px;
-  width: 100%;
-}
-
-.profilecard .title {
-  color: grey;
-}
-
-.profilecard button {
-  width: 100%;
-}
-
-.profilecard button:hover {
-  opacity: 0.7;
+.bio button:hover {
+  opacity: 1;
 }
 
 .badge {
@@ -291,6 +277,15 @@ textarea {
 .Pmessages {
   margin-bottom: 30px;
 }
+
+.memberpost h3 a{
+  color: #50514F;
+}
+
+.memberpost h3 a:hover{
+  color: #1C9954;
+}
+
 
 /* Big screen style */
 @media screen and (min-width: 700px) {
