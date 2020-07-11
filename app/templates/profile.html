@@ -15,10 +15,11 @@
 
 
   <div class="bio">
-    <h1>NAME: {{ user.Name }} (username: {{ user.Username }})</h1>
-    <h2>BIO: {% if user.Bio %} {{ user.Bio}} {% else %} Information not available {% endif %} </h2>
-    <h2>Email: {{ user.Email}} </h2>
-    <h3>Been a member since: {{ moment(user.RegisteredDate).format('LL') }}</h3>
+    <h1>NAME: {{ user.Name|title }}</h1>
+    <h3>USERNAME: {{ user.Username }}</h3>
+    <h3>BIO: {% if user.Bio %} {{ user.Bio}} {% else %} Information not available {% endif %} </h3>
+    <h3>EMAIL: {{ user.Email}} </h3>
+    <h3>MEMBER SINCE: {{ moment(user.RegisteredDate).format('LL') }}</h3>
 
     {% if user == current_user %}
     <p>Last seen: {% if user.LastSeen %} {{ moment(user.LastSeen).format('LLLL') }} {% endif %} </p>

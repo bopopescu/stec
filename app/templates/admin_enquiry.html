@@ -10,7 +10,7 @@
 
       <article class="Pmessage">
         <h2>{{ enquiry.Enquiry }}</h2>
-        <h4>Sent by: {{ enquiry.Name.capitalize() }}</h4>
+        <h4>Sent by: {{ enquiry.Name|title }}</h4>
         <h4>Email: {{ enquiry.Email }} </h4>
         <p>Delivered: {{ moment(enquiry.Timestamp).fromNow() }}</p>
       </article>
