@@ -40,5 +40,7 @@ def create_app(config_class=Config):
 
             app.logger.setLevel(logging.INFO)
             app.logger.info('STEC SERVER STARTS')
+            
+    return app
 
 from app import routes, models, errors
