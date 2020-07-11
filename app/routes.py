@@ -1,6 +1,7 @@
 """Initializaing the application instance."""
 from datetime import datetime
-from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask import render_template, flash, redirect, url_for, request, jsonify,\
+                abort
 from werkzeug.urls import url_parse
 from itsdangerous import URLSafeTimedSerializer
 from app import app, db
@@ -86,7 +87,7 @@ def confirm_email(emailToken):
                                  salt=app.config['SECURITY_PASSWORD_SALT'],
                                  max_age=1800)
     except:
-        return
+        abort(404)
 
     user = Users.query.filter_by(Email=Email).first_or_404()
 
