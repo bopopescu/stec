@@ -2,11 +2,14 @@
 
 {% block content %}
 
-  <section class="articles">
+<h1 align="center">STEC Articles</h1>
+
     {% for post in posts %}
+    <section class="articles">
       {% include 'adminposts.html' %}
+    </section>
     {% endfor %}
-  </section>
+
 
   <div class="sectMargin">
     {% if prev_url %}
