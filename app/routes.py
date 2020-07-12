@@ -13,7 +13,8 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm, \
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Users, UserPosts, Contacts, Posts, \
             UserMessages, Notifications
-from app.email_sendgrid import email_password_reset, email_confirmation
+from app.email_sendgrid import email_password_reset, email_confirmation, \
+            email_confirmation_resend
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -39,6 +40,7 @@ def login():
         return redirect(url_for('admin_dashboard'))
     elif current_user.is_authenticated:
         return redirect(url_for('dashboard'))
+
     form = LoginForm()
     if form.validate_on_submit():
         # Query database to check user credentials
@@ -50,7 +52,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         # Redirect if user credentials is correct
         next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
+        if next_page is None or not next_page.startswith('/'):
             next_page = url_for('dashboard')
         flash('Login successful')
         return redirect(next_page)
@@ -87,7 +89,7 @@ def confirm_email(emailToken):
                                  salt=app.config['SECURITY_PASSWORD_SALT'],
                                  max_age=1800)
     except:
-        abort(404)
+        flash('The confirmation link is Invalid or has expired')
 
     user = Users.query.filter_by(Email=Email).first_or_404()
 
@@ -97,6 +99,33 @@ def confirm_email(emailToken):
     db.session.commit()
 
     flash('Email confirmation successful, Welcome to STEC!!!')
+    return redirect(url_for('login'))
+
+
+@app.before_request
+def before_request():
+    """Render the previous date the user logged in."""
+    if current_user.is_authenticated:
+        current_user.LastSeen = datetime.utcnow()
+        db.session.commit()
+    elif current_user.is_authenticated and not current_user.Confirmed:
+        return redirect(url_for('email_unconfirmed'))
+
+
+@app.route('/email_unconfirmed')
+def email_unconfirmed():
+    if current_user.is_authenticated and current_user.Confirmed==True:
+        return redirect(url_for('dashboard'))
+    elif not current_user.is_authenticated:
+        return redirect(url_for('login'))
+    return render_template('email_unconfirmed.html')
+
+
+@app.route('/confirm')
+@login_required
+def resend_confirmation():
+    email_confirmation_resend(current_user)
+    flash('A new email confirmation has been sent, check your email.')
     return redirect(url_for('login'))
 
 
