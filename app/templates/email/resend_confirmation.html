@@ -1,0 +1,13 @@
+<h2>Dear {{ user.Username.upper() }},</h2>
+<p>This is the new email confirmation you requested,
+  kindly confirm your email address and activate your account.</p>
+
+<h3>
+Confirm Email:
+  <a href="{{ url_for('confirm_email', emailToken=emailToken, _external=True) }}">
+    click here
+  </a>
+</h3>
+
+<p>Sincerely,</p>
+<p>STEC Team</p>
