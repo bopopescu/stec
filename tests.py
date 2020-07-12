@@ -1,5 +1,4 @@
 """Initializaing the application instance."""
-from datetime import datetime, timedelta
 import unittest
 from flask import current_app
 from app import app, db
@@ -38,14 +37,14 @@ class UsersModelTestCase(unittest.TestCase):
         self.assertTrue(user.Password is not None)
 
     def test_password_verify(self):
-        """Testing password hash."""
+        """Verifying password hash."""
         user = Users(Username='aminat')
         user.set_password('tests')
         self.assertFalse(user.check_password('testsfalse'))
         self.assertTrue(user.check_password('tests'))
 
     def test_password_hash_random(self):
-        """Testing password hash."""
+        """Testing password hash is random."""
         user1 = Users(Username='aminat')
         user2 = Users(Username='yinka')
         user1.set_password('test')
