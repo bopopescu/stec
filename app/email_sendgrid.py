@@ -44,3 +44,16 @@ def email_confirmation(user):
                                          user=user, emailToken=emailToken),
                html_body=render_template('email/email_confirmation.html',
                                          user=user, emailToken=emailToken))
+
+def email_confirmation_resend(user):
+    """Email confirmation information."""
+    serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+    emailToken = serializer.dumps(user.Email,
+                                  salt=app.config['SECURITY_PASSWORD_SALT'])
+    send_email('[STEC] New Email Confirmation',
+               sender=app.config['MAIL_DEFAULT_SENDER'],
+               recipients=[user.Email],
+               text_body=render_template('email/resend_confirmation.txt',
+                                         user=user, emailToken=emailToken),
+               html_body=render_template('email/resend_confirmation.html',
+                                         user=user, emailToken=emailToken))
