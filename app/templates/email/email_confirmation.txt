@@ -1,4 +1,4 @@
-Dear {{ user.Username.capitalize()  }},
+Dear {{ user.Username.upper()  }},
 
 This email was used to create an account with us,
 kindly confirm your email address and activate your account.
