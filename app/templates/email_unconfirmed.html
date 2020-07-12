@@ -1,0 +1,14 @@
+{% extends 'form.html' %}
+
+{% block content %}
+
+  <h1>Hello, {{ current_user.Username }}</h1>
+
+  <h3>You are yet to confirm your email address.</h3>
+
+  <p>To access the registered member's page, your email needs to be confirmed. Check your inbox,
+  you should have gotten an email with a confirmation link.</p>
+
+  <p>Resend confirmation email? <a href="{{ url_for('resend_confirmation') }}"> Click here </a></p>
+
+{% endblock %}
