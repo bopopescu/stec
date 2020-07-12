@@ -462,14 +462,22 @@ def delete_article(PostID):
     flash('You are not an administrator.')
     return redirect(url_for('dashboard'))
 
+# This changes the StecAdmin from false to true
+# @app.route('/stecadminstatus', methods=['GET', 'POST'])
+# @login_required
+# def stecadminstatus():
+#     """Change StecAdmin to true."""
+#     if current_user.StecAdmin==False:
+#         current_user.StecAdmin = True
+#         db.session.commit()
+#         flash('You are now an Adminstrator')
+#     return redirect(url_for('admin_dashboard'))
 
 @app.route('/stecadmin', methods=['GET', 'POST'])
 @login_required
 def stecadmin():
     """Change StecAdmin to true."""
-    if current_user.StecAdmin==False:
-        current_user.StecAdmin = True
-        db.session.commit()
-        flash('You are now an Adminstrator')
-    flash('You are already an administrator')
-    return redirect(url_for('admin_dashboard'))
+    if current_user.StecAdmin==True:
+        return redirect(url_for('admin_dashboard'))
+    flash('You are not an administrator.')
+    return redirect(url_for('dashboard'))
