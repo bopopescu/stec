@@ -1,0 +1,10 @@
+Dear {{ user.Username.upper()  }},
+
+This is the new email confirmation you requested,
+kindly confirm your email address and activate your account.
+
+{{ url_for('confirm_email', emailToken=emailToken, _external=True) }}
+
+Sincerely,
+
+STEC Team
