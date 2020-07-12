@@ -32,9 +32,9 @@
 {% for post in posts %}
   <section class="articles">
     <article class="yourpost">
-        <h4>{{ post.Body }}</h4>
+        <h2>{{ post.Body }}</h2>
         <p> Posted: {{ moment(post.Timestamp).fromNow() }}</p>
-        <p><img src="{{ post.author.avatar(36) }}" alt="user avatar"> by: {{ post.author.Username }}</p>
+        <h3>By: This is your post</h3>
     </article>
     <div class="posticon">
     {% if user == current_user %}
