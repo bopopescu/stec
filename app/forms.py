@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, \
         SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, \
-        Email, EqualTo, Length
+        Email, EqualTo, Length, Regexp
 from app.models import Users
 
 
@@ -11,7 +11,7 @@ class ContactForm(FlaskForm):
     """Contact Form in index page."""
 
     name = StringField('Name', validators=[
-                DataRequired(), Length(min=5, max=150)])
+                DataRequired(), Length(min=5, max=150),])
     email = StringField('Email', validators=[DataRequired(), Email()])
     enquiry = TextAreaField('Enquiry', validators=[
         DataRequired(), Length(min=5)])
@@ -32,7 +32,10 @@ class RegistrationForm(FlaskForm):
     name = StringField('Name', validators=[
                 DataRequired(), Length(min=5, max=150)])
     username = StringField('Username', validators=[
-                DataRequired(), Length(min=5, max=15)])
+                DataRequired(), Length(min=5, max=15),
+                Regexp('^[A-Za-z][A-Za-z0-9_.]*$', 0,
+               'Username must have only letters, numbers, dots or '
+               'underscores')])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[
                 DataRequired(), Length(min=7, max=15)])
@@ -51,7 +54,7 @@ class RegistrationForm(FlaskForm):
         """Verify that the Email is unique."""
         user = Users.query.filter_by(Email=Email.data).first()
         if user is not None:
-            raise ValidationError('Account with this email address exists.')
+            raise ValidationError('Account with this email already exists.')
 
 
 class EditProfileForm(FlaskForm):
