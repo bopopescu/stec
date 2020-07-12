@@ -53,7 +53,7 @@ def login():
         # Redirect if user credentials is correct
         next_page = request.args.get('next')
         if next_page is None or not next_page.startswith('/'):
-            next_page = url_for('dashboard')
+            next_page = url_for('email_unconfirmed')
         flash('Login successful')
         return redirect(next_page)
     return render_template('login.html', title='Sign in', form=form)
