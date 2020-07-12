@@ -1,7 +1,7 @@
 """Initializaing the application instance."""
 from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request, jsonify,\
-                abort
+                make_response
 from werkzeug.urls import url_parse
 from itsdangerous import URLSafeTimedSerializer
 from app import app, db
@@ -187,14 +187,6 @@ def edit_profile():
         form.bio.data = current_user.Bio
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
-
-
-@app.before_request
-def before_request():
-    """Render the previous date the user logged in."""
-    if current_user.is_authenticated:
-        current_user.LastSeen = datetime.utcnow()
-        db.session.commit()
 
 
 @app.route('/members_post')
@@ -469,3 +461,15 @@ def delete_article(PostID):
                                form=form, post=post)
     flash('You are not an administrator.')
     return redirect(url_for('dashboard'))
+
+
+@app.route('/stecadmin', methods=['GET', 'POST'])
+@login_required
+def stecadmin():
+    """Change StecAdmin to true."""
+    if current_user.StecAdmin==False:
+        current_user.StecAdmin = True
+        db.session.commit()
+        flash('You are now an Adminstrator')
+    flash('You are already an administrator')
+    return redirect(url_for('admin_dashboard'))
